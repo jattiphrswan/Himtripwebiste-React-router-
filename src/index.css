@@ -1,10 +1,15 @@
+/* Import third-party CSS first */
+@import "slick-carousel/slick/slick.css";
+@import "slick-carousel/slick/slick-theme.css";
+@import url('https://unpkg.com/leaflet/dist/leaflet.css');
+
+/* Tailwind directives */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@import "~slick-carousel/slick/slick.css";
-@import "~slick-carousel/slick/slick-theme.css";
-@import url('https://unpkg.com/leaflet/dist/leaflet.css');
+/* Your custom CSS can go below */
+
 
 
 body {
