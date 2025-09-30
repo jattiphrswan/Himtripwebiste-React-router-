@@ -34,14 +34,15 @@ const SearchForm = () => {
       <form
         onSubmit={handleSearch}
         className="flex flex-col sm:flex-row items-center p-4 sm:p-2 space-y-2 sm:space-y-0 sm:space-x-3
-                   bg-white/30 backdrop-blur-sm rounded-xl shadow-lg border border-white/40"
+                   bg-white/30 backdrop-blur-sm rounded-xl shadow-lg border border-white/40
+                   animate-fadeIn"
       >
         {/* Where */}
         <div className="flex-1 relative">
           <select
             value={where}
             onChange={(e) => setWhere(e.target.value)}
-            className="w-full border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-white/80 backdrop-blur-sm"
+            className="w-full border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-white/80 backdrop-blur-sm transition transform hover:scale-105 duration-300"
           >
             <option value="">Where?</option>
             {locations.map((loc) => (
@@ -85,7 +86,7 @@ const SearchForm = () => {
             type="date"
             value={when}
             onChange={(e) => setWhen(e.target.value)}
-            className="w-full border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-white/80 backdrop-blur-sm"
+            className="w-full border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-white/80 backdrop-blur-sm transition transform hover:scale-105 duration-300"
           />
         </div>
 
@@ -94,7 +95,7 @@ const SearchForm = () => {
           <select
             value={adventure}
             onChange={(e) => setAdventure(e.target.value)}
-            className="w-full border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-white/80 backdrop-blur-sm"
+            className="w-full border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-white/80 backdrop-blur-sm transition transform hover:scale-105 duration-300"
           >
             <option value="">Adventure Type</option>
             {adventures.map((adv) => (
@@ -108,11 +109,24 @@ const SearchForm = () => {
         {/* Search Button */}
         <button
           type="submit"
-          className="mt-2 sm:mt-0 w-full sm:w-auto bg-[#C2410C] hover:bg-[#00BF63] text-white font-semibold px-6 py-2 rounded-xl shadow-lg transition duration-300 transform hover:-translate-y-1"
+          className="mt-2 sm:mt-0 w-full sm:w-auto bg-[#C2410C] hover:bg-[#00BF63] text-white font-semibold px-6 py-2 rounded-xl shadow-lg transition duration-300 transform hover:-translate-y-1 hover:scale-105"
         >
           Search
         </button>
       </form>
+
+      {/* Tailwind animation */}
+      <style>
+        {`
+          @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(-10px);}
+            100% { opacity: 1; transform: translateY(0);}
+          }
+          .animate-fadeIn {
+            animation: fadeIn 0.8s ease forwards;
+          }
+        `}
+      </style>
     </div>
   );
 };

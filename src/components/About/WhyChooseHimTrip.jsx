@@ -41,10 +41,11 @@ const WhyChooseHimTrip = () => {
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {features.map((feature) => (
+          {features.map((feature, index) => (
             <div
               key={feature.id}
-              className="bg-white rounded-2xl p-6 text-center shadow-lg hover:shadow-2xl transition-shadow duration-300"
+              className={`bg-white rounded-2xl p-6 text-center shadow-lg transform transition duration-500 hover:shadow-2xl hover:-translate-y-2 opacity-0 animate-fadeIn`}
+              style={{ animationDelay: `${index * 0.2}s`, animationFillMode: "forwards" }}
             >
               <div className="flex justify-center mb-4">{feature.icon}</div>
               <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
@@ -53,6 +54,19 @@ const WhyChooseHimTrip = () => {
           ))}
         </div>
       </div>
+
+      {/* Fade-in animation */}
+      <style>
+        {`
+          @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+          }
+          .animate-fadeIn {
+            animation: fadeIn 0.8s ease forwards;
+          }
+        `}
+      </style>
     </section>
   );
 };

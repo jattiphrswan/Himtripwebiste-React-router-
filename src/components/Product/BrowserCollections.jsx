@@ -14,17 +14,16 @@ const collections = [
   { id: 5, title: "Food", subtitle: "Taste local delicacies", image: img5 },
 ];
 
-
 export default function BrowserCollections() {
   const settings = {
     dots: true,
     infinite: true,
-    speed: 500,
+    speed: 600,
     slidesToShow: 4,
     slidesToScroll: 1,
     arrows: false,
-    autoplay: true,          // 👈 enable automatic sliding
-    autoplaySpeed: 3000,     // 👈 change slide every 3 seconds
+    autoplay: true,
+    autoplaySpeed: 3000,
     responsive: [
       { breakpoint: 1024, settings: { slidesToShow: 3 } },
       { breakpoint: 768,  settings: { slidesToShow: 2 } },
@@ -35,23 +34,28 @@ export default function BrowserCollections() {
   return (
     <section className="py-16 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-10">
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">
+        {/* Section Heading */}
+        <div className="text-center mb-12">
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 animate-fadeUp">
             Browse Collections
           </h2>
-          <p className="mt-2 text-gray-600">
+          <p className="mt-2 text-gray-600 animate-fadeUp" style={{ animationDelay: "0.2s" }}>
             Get ideas on what to do, see, and eat
           </p>
         </div>
 
+        {/* Slider */}
         <Slider {...settings}>
-          {collections.map((item) => (
+          {collections.map((item, index) => (
             <div key={item.id} className="px-2">
-              <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300">
+              <div
+                className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-500 transform hover:scale-105 opacity-0 animate-fadeUp"
+                style={{ animationDelay: `${0.2 * index}s` }}
+              >
                 <img
                   src={item.image}
                   alt={item.title}
-                  className="w-full h-64 object-cover"
+                  className="w-full h-64 sm:h-56 md:h-64 object-cover"
                 />
                 <div className="p-4">
                   <h3 className="text-lg font-semibold">{item.title}</h3>
@@ -61,6 +65,19 @@ export default function BrowserCollections() {
             </div>
           ))}
         </Slider>
+
+        {/* Fade-up animation CSS */}
+        <style>
+          {`
+            @keyframes fadeUp {
+              0% { opacity: 0; transform: translateY(20px); }
+              100% { opacity: 1; transform: translateY(0); }
+            }
+            .animate-fadeUp {
+              animation: fadeUp 0.8s ease forwards;
+            }
+          `}
+        </style>
       </div>
     </section>
   );
