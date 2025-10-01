@@ -25,9 +25,24 @@ export default function BrowserCollections() {
     autoplay: true,
     autoplaySpeed: 3000,
     responsive: [
-      { breakpoint: 1024, settings: { slidesToShow: 3 } },
-      { breakpoint: 768,  settings: { slidesToShow: 2 } },
-      { breakpoint: 640,  settings: { slidesToShow: 1 } },
+      {
+        breakpoint: 1024, // Tablet
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+          centerMode: false,
+          infinite: true,
+        },
+      },
+      {
+        breakpoint: 640, // Mobile
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          centerMode: false,
+          infinite: true,
+        },
+      },
     ],
   };
 
@@ -39,7 +54,10 @@ export default function BrowserCollections() {
           <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 animate-fadeUp">
             Browse Collections
           </h2>
-          <p className="mt-2 text-gray-600 animate-fadeUp" style={{ animationDelay: "0.2s" }}>
+          <p
+            className="mt-2 text-gray-600 animate-fadeUp"
+            style={{ animationDelay: "0.2s" }}
+          >
             Get ideas on what to do, see, and eat
           </p>
         </div>
@@ -47,7 +65,7 @@ export default function BrowserCollections() {
         {/* Slider */}
         <Slider {...settings}>
           {collections.map((item, index) => (
-            <div key={item.id} className="px-2">
+            <div key={item.id} className="px-3 sm:px-2">
               <div
                 className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-500 transform hover:scale-105 opacity-0 animate-fadeUp"
                 style={{ animationDelay: `${0.2 * index}s` }}

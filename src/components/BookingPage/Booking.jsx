@@ -24,7 +24,7 @@ const getInitialBookingData = (tour) => ({
 
 // Step progress bar
 const StepIndicator = ({ currentStep, totalSteps }) => (
-  <div className="flex justify-between items-center mb-8 px-4 sm:px-0">
+  <div className="flex justify-between items-center mb-8 px-2 sm:px-0 overflow-x-auto">
     {[...Array(totalSteps).keys()].map((i) => {
       const stepNum = i + 1;
       const isActive = stepNum === currentStep;
@@ -32,7 +32,7 @@ const StepIndicator = ({ currentStep, totalSteps }) => (
       const labels = ["Tour & People", "Activities", "Traveler Details", "Confirmation"];
       return (
         <React.Fragment key={stepNum}>
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center min-w-[70px] sm:min-w-auto">
             <div
               className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold transition-colors duration-300 shadow-md ${
                 isCompleted ? "bg-green-500" : isActive ? "bg-orange-600" : "bg-gray-300"
@@ -41,14 +41,16 @@ const StepIndicator = ({ currentStep, totalSteps }) => (
               {isCompleted ? "✓" : stepNum}
             </div>
             <span
-              className={`text-sm mt-2 hidden sm:block ${isActive ? "text-orange-600 font-semibold" : "text-gray-500"}`}
+              className={`text-xs sm:text-sm mt-1 text-center ${
+                isActive ? "text-orange-600 font-semibold" : "text-gray-500"
+              }`}
             >
               {labels[i]}
             </span>
           </div>
           {stepNum < totalSteps && (
             <div
-              className={`flex-grow h-1 mx-2 transition-colors duration-300 ${
+              className={`flex-grow h-1 mx-1 sm:mx-2 transition-colors duration-300 ${
                 isCompleted ? "bg-green-500" : "bg-gray-300"
               }`}
             ></div>
@@ -63,7 +65,7 @@ const StepIndicator = ({ currentStep, totalSteps }) => (
 const TravelerDetailForm = ({ index, traveler, onChange }) => (
   <div className="bg-gray-50 p-4 rounded-lg shadow-sm border border-gray-200 mb-4">
     <h4 className="text-lg font-semibold text-gray-700 mb-3">Traveler #{index + 1}</h4>
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
         <input
@@ -211,11 +213,11 @@ export default function Booking() {
   // --- Render Step Content ---
   const renderStep1 = () => (
     <div className="space-y-6">
-      <h3 className="text-2xl font-bold text-gray-800">1. Select Your Journey</h3>
+      <h3 className="text-xl sm:text-2xl font-bold text-gray-800">1. Select Your Journey</h3>
       <div className="p-6 bg-orange-50 border border-orange-200 rounded-xl shadow-inner">
-        <h4 className="text-xl font-semibold text-orange-700">{tour.title}</h4>
-        <p className="text-sm text-gray-600 mt-1">{tour.destination}</p>
-        <div className="mt-4 grid grid-cols-2 gap-4 text-gray-700">
+        <h4 className="text-lg sm:text-xl font-semibold text-orange-700">{tour.title}</h4>
+        <p className="text-sm sm:text-base text-gray-600 mt-1">{tour.destination}</p>
+        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4 text-gray-700">
           <div>
             <span className="font-medium block">Duration:</span>
             <span className="text-lg font-bold text-orange-600">{tour.duration} Days</span>
@@ -242,7 +244,7 @@ export default function Booking() {
 
   const renderStep2 = () => (
     <div className="space-y-6">
-      <h3 className="text-2xl font-bold text-gray-800">2. Choose Add-on Activities</h3>
+      <h3 className="text-xl sm:text-2xl font-bold text-gray-800">2. Choose Add-on Activities</h3>
       <div className="space-y-3">
         {ACTIVITIES.map((activity) => (
           <div
@@ -274,7 +276,7 @@ export default function Booking() {
 
   const renderStep3 = () => (
     <div className="space-y-6">
-      <h3 className="text-2xl font-bold text-gray-800">3. Traveler Details</h3>
+      <h3 className="text-xl sm:text-2xl font-bold text-gray-800">3. Traveler Details</h3>
       {bookingData.travelers.map((traveler, index) => (
         <TravelerDetailForm key={index} index={index} traveler={traveler} onChange={handleTravelerChange} />
       ))}
@@ -283,10 +285,13 @@ export default function Booking() {
 
   const renderStep4 = () => (
     <div className="space-y-6">
-      <h3 className="text-2xl font-bold text-green-700">4. Review & Confirm Booking</h3>
+      <h3 className="text-xl sm:text-2xl font-bold text-green-700">4. Review & Confirm Booking</h3>
       <p>Tour: {tour.title}</p>
       <p>Travelers: {bookingData.numTravelers}</p>
-      <p>Activities: {bookingData.activities.map((id) => ACTIVITIES.find((a) => a.id === id)?.name).join(", ") || "None"}</p>
+      <p>
+        Activities:{" "}
+        {bookingData.activities.map((id) => ACTIVITIES.find((a) => a.id === id)?.name).join(", ") || "None"}
+      </p>
       <p>Total: {formatINR(bookingData.totalPrice)}</p>
     </div>
   );
@@ -298,7 +303,7 @@ export default function Booking() {
           ← Back to Tours
         </Link>
 
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-center text-orange-700 mb-6 border-b pb-2">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-center text-orange-700 mb-6 border-b pb-2">
           Booking: {tour.title}
         </h1>
 
@@ -306,7 +311,7 @@ export default function Booking() {
 
         {message && (
           <div
-            className={`mb-4 p-3 rounded-lg text-white ${
+            className={`mb-4 p-3 rounded-lg text-white text-sm sm:text-base ${
               message.type === "error" ? "bg-red-500" : "bg-green-500"
             }`}
           >
@@ -314,7 +319,7 @@ export default function Booking() {
           </div>
         )}
 
-        <div className="mt-4">
+        <div className="mt-4 space-y-6">
           {currentStep === 1 && renderStep1()}
           {currentStep === 2 && renderStep2()}
           {currentStep === 3 && renderStep3()}
@@ -322,26 +327,28 @@ export default function Booking() {
         </div>
 
         {/* Navigation Buttons */}
-        <div className="mt-8 flex justify-between">
+        <div className="mt-8 flex flex-col sm:flex-row justify-between gap-4 sm:gap-0">
           {currentStep > 1 ? (
             <button
               onClick={handleBack}
-              className="px-6 py-3 bg-gray-300 rounded-lg font-semibold hover:bg-gray-400 transition"
+              className="w-full sm:w-auto px-6 py-3 bg-gray-300 rounded-lg font-semibold hover:bg-gray-400 transition"
             >
               Back
             </button>
-          ) : <div></div>}
+          ) : (
+            <div className="w-full sm:w-auto"></div>
+          )}
           {currentStep < TOTAL_STEPS ? (
             <button
               onClick={handleNext}
-              className="px-6 py-3 bg-orange-600 text-white rounded-lg font-semibold hover:bg-orange-700 transition"
+              className="w-full sm:w-auto px-6 py-3 bg-orange-600 text-white rounded-lg font-semibold hover:bg-orange-700 transition"
             >
               Next
             </button>
           ) : (
             <button
               onClick={handleSubmit}
-              className="px-6 py-3 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition"
+              className="w-full sm:w-auto px-6 py-3 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition"
             >
               Confirm Booking
             </button>

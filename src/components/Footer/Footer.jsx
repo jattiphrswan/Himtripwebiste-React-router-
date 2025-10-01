@@ -88,7 +88,7 @@ export default function Footer() {
         </div>
 
         {/* 4. Social Media */}
-        <div className="flex flex-wrap justify-center md:justify-start space-x-4 mb-4">
+        <div className="flex flex-wrap justify-center md:justify-center space-x-4 mb-4">
           <a href="#" className="p-2 bg-gray-800 rounded-full hover:bg-orange-500 transition-colors">
             <Facebook className="w-5 h-5" />
           </a>
@@ -104,7 +104,7 @@ export default function Footer() {
         </div>
 
         {/* 5. Footer Legal */}
-        <div className="text-xs text-gray-500 text-center md:text-left">
+        <div className="text-xs text-gray-500 text-center md:text-center">
           © 2025 Your Company. All rights reserved.
         </div>
 

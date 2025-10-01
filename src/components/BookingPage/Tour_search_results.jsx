@@ -1,10 +1,9 @@
 import React, { useState, useMemo } from "react";
+import { Link } from "react-router-dom";
 import himImage from "../../assets/places/kedarnath.png";
-import toursData from "../Backend/BackenData"; // import centralized data
+import toursData from "../Backend/BackenData";
 
-// Use toursData instead of initialTours
 const initialTours = toursData;
-// --- MOCK DATA ---
 
 // --- Helpers ---
 const formatINR = (price) =>
@@ -26,69 +25,76 @@ const renderStars = (rating) => {
 };
 
 // --- Tour Card ---
-const TourCard = ({ tour, alert }) => (
-  <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition duration-300 overflow-hidden border border-gray-100 flex flex-col h-full">
-    <div className="h-40 relative overflow-hidden rounded-t-xl">
-      {tour.onSale && (
-        <span className="absolute top-2 left-2 bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded-full z-10">
-          SALE
-        </span>
-      )}
-      <img
-        src={tour.image} // use backend image
-        alt={tour.title}
-        className="w-full h-40 object-cover"
-      />
-    </div>
+const TourCard = ({ tour }) => {
+ 
 
-    <div className="p-4 flex flex-col flex-1">
-      <div className="flex items-center text-sm text-yellow-600 mb-2">
-        {renderStars(tour.rating)}
-        <span className="text-gray-500 ml-2">
-          ({tour.rating}/5 based on {tour.reviews} reviews)
-        </span>
-      </div>
-      <h3 className="text-xl font-bold text-gray-800 mb-2 truncate">
-        {tour.title}
-      </h3>
-      <p className="text-sm text-gray-500 mb-4 flex items-center space-x-2">
-        <i className="ph-bold ph-map-pin"></i>
-        <span>{tour.destination}</span>
-      </p>
-      <div className="flex justify-between items-end border-t pt-3 mt-auto">
-        <div className="text-lg">
-          <span className="block text-sm text-gray-500">
-            Duration: {tour.duration} days
+  
+
+  return (
+    <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition duration-300 overflow-hidden border border-gray-100 flex flex-col h-full">
+      <div className="h-40 relative overflow-hidden rounded-t-xl">
+        {tour.onSale && (
+          <span className="absolute top-2 left-2 bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded-full z-10">
+            SALE
           </span>
-          <span className="block text-sm text-gray-500">
-            Style: {tour.style}
+        )}
+        <img
+          src={tour.image}
+          alt={tour.title}
+          className="w-full h-40 object-cover"
+        />
+      </div>
+
+      <div className="p-4 flex flex-col flex-1">
+        <div className="flex items-center text-sm text-yellow-600 mb-2">
+          {renderStars(tour.rating)}
+          <span className="text-gray-500 ml-2">
+            ({tour.rating}/5 based on {tour.reviews} reviews)
           </span>
         </div>
-        <div className="text-right">
-          {tour.originalPrice && (
-            <span className="block text-xs text-gray-500 line-through">
-              {formatINR(tour.originalPrice)}
+        <h3 className="text-xl font-bold text-gray-800 mb-2 truncate">
+          {tour.title}
+        </h3>
+        <p className="text-sm text-gray-500 mb-4 flex items-center space-x-2">
+          <i className="ph-bold ph-map-pin"></i>
+          <span>{tour.destination}</span>
+        </p>
+        <div className="flex justify-between items-end border-t pt-3 mt-auto">
+          <div className="text-lg">
+            <span className="block text-sm text-gray-500">
+              Duration: {tour.duration} days
             </span>
-          )}
-          <span
-            className={`text-2xl font-extrabold ${
-              tour.onSale ? "text-red-600" : "text-orange-600"
-            }`}
-          >
-            {formatINR(tour.price)}
-          </span>
-          <span className="block text-xs text-gray-500">per person</span>
+            <span className="block text-sm text-gray-500">
+              Style: {tour.style}
+            </span>
+          </div>
+          <div className="text-right">
+            {tour.originalPrice && (
+              <span className="block text-xs text-gray-500 line-through">
+                {formatINR(tour.originalPrice)}
+              </span>
+            )}
+            <span
+              className={`text-2xl font-extrabold ${
+                tour.onSale ? "text-red-600" : "text-orange-600"
+              }`}
+            >
+              {formatINR(tour.price)}
+            </span>
+            <span className="block text-xs text-gray-500">per person</span>
+          </div>
         </div>
       </div>
+
+    <Link
+  to={`/booking/${tour.id}`} // navigate to booking page with tour id
+  className="mt-auto inline-block w-full text-center px-4 py-3 bg-orange-500 text-white font-semibold rounded-b-xl hover:bg-orange-600 transition"
+>
+  Book Now
+</Link>
     </div>
-    <button
-      onClick={() => alert(`Navigating to details for: ${tour.title}`)}
-      className="w-full bg-orange-500 text-white py-3 font-semibold hover:bg-orange-600 transition focus:outline-none focus:ring-4 focus:ring-orange-300 rounded-b-xl"
-    >
-      View Tour Details
-    </button>
-  </div>
-);
+  );
+};
 
 // --- App Component ---
 export default function App() {
@@ -109,6 +115,7 @@ export default function App() {
 
   const handleFilterChange = (name, value) =>
     setFilters((prev) => ({ ...prev, [name]: value }));
+
   const handleStyleToggle = (style) =>
     setFilters((prev) => ({
       ...prev,
@@ -116,6 +123,7 @@ export default function App() {
         ? prev.styles.filter((s) => s !== style)
         : [...prev.styles, style],
     }));
+
   const handleToggleFilters = () => setShowFilters((prev) => !prev);
 
   const filteredAndSortedTours = useMemo(() => {
@@ -160,12 +168,9 @@ export default function App() {
         className="relative bg-cover bg-center bg-no-repeat text-white p-6 sm:p-8 rounded-b-3xl shadow-lg w-full z-20"
         style={{ backgroundImage: `url(${himImage})` }}
       >
-        {/* Dark overlay */}
         <div className="absolute inset-0 bg-black/40 rounded-b-3xl"></div>
 
-        {/* Centered content */}
         <div className="relative flex flex-col justify-center items-center text-center gap-4">
-          {/* Title */}
           <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-white drop-shadow-lg">
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-yellow-300 via-white to-yellow-100">
               Uttarakhand Adventure Search
@@ -176,7 +181,7 @@ export default function App() {
           </h1>
         </div>
 
-        <div className="relative  inline-block bg-white/20 backdrop-blur-sm px-4 py-1 rounded-full text-sm text-white font-medium shadow-sm animate-pulse">
+        <div className="relative inline-block bg-white/20 backdrop-blur-sm px-4 py-1 rounded-full text-sm text-white font-medium shadow-sm animate-pulse">
           Found {filteredAndSortedTours.length} adventure
           {filteredAndSortedTours.length !== 1 && "s"} in the Himalayas
         </div>
@@ -184,7 +189,6 @@ export default function App() {
 
       <div className="pt-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
-          {/* Sidebar */}
           <aside
             className={`${
               showFilters ? "translate-x-0" : "-translate-x-full"
@@ -295,9 +299,9 @@ export default function App() {
             <button
               onClick={() => {
                 alertMessage(
-                  `Filters applied: Destination=${
-                    filters.destination
-                  }, Budget=${formatINR(filters.maxBudget)}`
+                  `Filters applied: Destination=${filters.destination}, Budget=${formatINR(
+                    filters.maxBudget
+                  )}`
                 );
                 handleToggleFilters();
               }}
@@ -348,7 +352,7 @@ export default function App() {
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
               {filteredAndSortedTours.length > 0 ? (
                 filteredAndSortedTours.map((tour) => (
-                  <TourCard key={tour.id} tour={tour} alert={alertMessage} />
+                  <TourCard key={tour.id} tour={tour} />
                 ))
               ) : (
                 <div className="lg:col-span-3 sm:col-span-2 text-center p-12 bg-yellow-50 rounded-lg border border-yellow-200">
