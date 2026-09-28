@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useMemo, useEffect } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import himImage from "../../assets/places/kedarnath.png";
 import toursData from "../Backend/BackenData";
 
@@ -26,10 +26,6 @@ const renderStars = (rating) => {
 
 // --- Tour Card ---
 const TourCard = ({ tour }) => {
- 
-
-  
-
   return (
     <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition duration-300 overflow-hidden border border-gray-100 flex flex-col h-full">
       <div className="h-40 relative overflow-hidden rounded-t-xl">
@@ -86,27 +82,46 @@ const TourCard = ({ tour }) => {
         </div>
       </div>
 
-    <Link
-  to={`/booking/${tour.id}`} // navigate to booking page with tour id
-  className="mt-auto inline-block w-full text-center px-4 py-3 bg-orange-500 text-white font-semibold rounded-b-xl hover:bg-orange-600 transition"
->
-  Book Now
-</Link>
+      <Link
+        to={`/booking/${tour.id}`}
+        className="mt-auto inline-block w-full text-center px-4 py-3 bg-orange-500 text-white font-semibold rounded-b-xl hover:bg-orange-600 transition"
+      >
+        Book Now
+      </Link>
     </div>
   );
 };
 
 // --- App Component ---
 export default function App() {
+  const [searchParams] = useSearchParams();
+  const initialWhere = searchParams.get("where") || "Anywhere in Uttarakhand";
+  const initialAdv = searchParams.get("adventure");
+  const initialDuration = parseInt(searchParams.get("duration")) || 15;
+
   const [filters, setFilters] = useState({
-    destination: "Anywhere in Uttarakhand",
-    styles: [],
-    duration: 15,
+    destination: initialWhere,
+    styles: initialAdv ? [initialAdv] : [],
+    duration: initialDuration,
     maxBudget: 0,
     sort: "Relevance",
   });
   const [message, setMessage] = useState(null);
   const [showFilters, setShowFilters] = useState(false);
+
+  useEffect(() => {
+    const where = searchParams.get("where");
+    const adv = searchParams.get("adventure");
+    const dur = searchParams.get("duration");
+    if (where || adv || dur) {
+      setFilters((prev) => ({
+        ...prev,
+        destination: where || prev.destination,
+        styles: adv ? [adv] : prev.styles,
+        duration: dur ? parseInt(dur) : prev.duration,
+      }));
+    }
+  }, [searchParams]);
 
   const alertMessage = (msg) => {
     setMessage({ type: "info", text: msg });

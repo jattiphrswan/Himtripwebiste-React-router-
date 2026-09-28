@@ -11,23 +11,27 @@ export default function Home() {
     <div className="w-full">
       {/* Hero Section */}
       <div
-        className="relative w-full min-h-screen bg-cover bg-center flex items-center justify-center animate-fadeIn"
+        className="relative w-full min-h-[92vh] sm:min-h-screen bg-cover bg-center flex flex-col items-center justify-center animate-fadeIn pt-24 pb-16 px-4"
         style={{ backgroundImage: `url(${kedarnath})` }}
       >
-        <div className="absolute inset-0 bg-black/50"></div>
-        <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold text-white leading-tight sm:leading-snug drop-shadow-lg animate-fadeUp">
+        <div className="absolute inset-0 bg-black/55 backdrop-blur-[0.5px]"></div>
+        
+        <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto mb-8">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-orange-600/30 backdrop-blur-md border border-orange-400/40 text-orange-200 text-xs sm:text-sm font-semibold mb-4 shadow-sm animate-fadeUp">
+            <span>✨ Discover Devbhoomi Uttarakhand</span>
+          </div>
+          <h1 className="text-3xl sm:text-5xl md:text-6xl font-black text-white leading-tight drop-shadow-xl animate-fadeUp font-heading">
             Experience Uttarakhand Like Never Before
           </h1>
-          <p className="mt-4 text-lg sm:text-xl md:text-2xl text-gray-100 drop-shadow-md animate-fadeUp" style={{ animationDelay: "0.3s" }}>
+          <p className="mt-4 text-base sm:text-xl text-gray-200 drop-shadow-md animate-fadeUp font-light" style={{ animationDelay: "0.2s" }}>
             Breathtaking views aur unforgettable moments ka perfect combo.
           </p>
         </div>
-      </div>
 
-      {/* Sticky Search Form */}
-      <div className="sticky top-[80px] z-40 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 -mt-12 animate-fadeIn">
-        <SearchForm />
+        {/* Hero Search Form */}
+        <div className="relative z-20 w-full max-w-5xl mx-auto px-2 animate-fadeUp" style={{ animationDelay: "0.4s" }}>
+          <SearchForm />
+        </div>
       </div>
 
       {/* Products, Collections, Adventure Preview */}
