@@ -1,33 +1,51 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import bannerImg from "../../assets/adventurs/adventuresbanner.jpeg";
-import { ADVENTURE_STYLES } from "../Backend/BackenData"; // adjust path if needed
+import { ADVENTURE_STYLES } from "../Backend/BackenData";
 import Products from "./product";
 import BrowserCollections from "./BrowserCollections";
 
 const StyleCard = ({ style, delay }) => (
-  <div
-    className="bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer group transform transition duration-300 ease-in-out hover:shadow-xl hover:-translate-y-1 flex flex-col h-full opacity-0 animate-fadeUp"
+  <Link
+    to={`/adventure-styles/${style.id}`}
+    className="bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer group transform transition duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-2 flex flex-col h-full opacity-0 animate-fadeUp border border-gray-100"
     style={{ animationDelay: `${delay}s` }}
   >
     <div
-      className="h-40 w-full bg-cover bg-center"
+      className="h-44 w-full bg-cover bg-center relative overflow-hidden"
       style={{ backgroundImage: `url(${style.imageUrl})` }}
     >
-      <div className="w-full h-full bg-black/10 group-hover:bg-black/20 transition duration-300"></div>
-    </div>
-    <div className="p-6 flex flex-col flex-grow">
-      <h3 className="text-xl font-extrabold text-gray-900 mb-2 leading-snug">
-        {style.title}
-      </h3>
-      <p className="text-sm text-gray-600 mb-4 flex-grow">{style.description}</p>
-      <div className="mt-auto pt-4 border-t border-gray-100">
-        <p className="text-xs font-semibold uppercase text-orange-600 mb-1">
-          Explore Destinations:
-        </p>
-        <p className="text-sm text-gray-700 font-medium">{style.example}</p>
+      <div className="w-full h-full bg-black/15 group-hover:bg-black/30 transition duration-300"></div>
+      <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-md px-2.5 py-1 rounded-full text-xs font-bold text-gray-800 shadow flex items-center gap-1.5">
+        <i className={`ph-bold ${style.icon} text-orange-600`}></i>
+        <span>{style.stats?.duration || "Multi-Day"}</span>
       </div>
     </div>
-  </div>
+    <div className="p-6 flex flex-col flex-grow justify-between">
+      <div>
+        <h3 className="text-xl font-extrabold text-gray-900 mb-2 leading-snug group-hover:text-orange-600 transition">
+          {style.title}
+        </h3>
+        <p className="text-sm text-gray-600 mb-4 line-clamp-3">{style.description}</p>
+      </div>
+
+      <div className="mt-auto pt-4 border-t border-gray-100 space-y-3">
+        <div>
+          <p className="text-xs font-semibold uppercase text-orange-600 mb-0.5">
+            Explore Destinations:
+          </p>
+          <p className="text-sm text-gray-700 font-medium truncate">{style.example}</p>
+        </div>
+
+        <div className="flex items-center justify-between text-xs font-bold text-orange-600 group-hover:text-orange-700 pt-1">
+          <span>View Adventure Guide</span>
+          <span className="transform group-hover:translate-x-1 transition duration-200">
+            →
+          </span>
+        </div>
+      </div>
+    </div>
+  </Link>
 );
 
 export default function AdventureStylesPage() {
@@ -54,13 +72,13 @@ export default function AdventureStylesPage() {
               Dive deep into the heart of Devbhoomi with trips tailored to every
               kind of explorer, from spiritual seekers to extreme adventurers.
             </p>
-            <a
-              href="/tours"
+            <Link
+              to="/tours"
               className="mt-8 inline-flex items-center px-8 py-3 border border-transparent text-lg font-bold rounded-full shadow-lg text-orange-800 bg-white hover:bg-orange-100 transition animate-fadeUp"
               style={{ animationDelay: "0.6s" }}
             >
               View All Tours
-            </a>
+            </Link>
           </div>
         </div>
       </header>
