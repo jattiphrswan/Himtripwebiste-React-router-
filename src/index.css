@@ -1,4 +1,7 @@
-/* Import third-party CSS first */
+/* Google Fonts Import */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
+
+/* Import third-party CSS */
 @import "slick-carousel/slick/slick.css";
 @import "slick-carousel/slick/slick-theme.css";
 @import url('https://unpkg.com/leaflet/dist/leaflet.css');
@@ -8,16 +11,18 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Your custom CSS can go below */
-
-
-
+/* Custom Typography & Base Styles */
 body {
-  font-family: system-ui, sans-serif;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   margin: 0;
   padding: 0;
   background-color: #F9FAFB;
   box-sizing: border-box;
+}
+
+h1, h2, h3, h4, h5, h6, .font-heading, .font-display {
+  font-family: 'Outfit', sans-serif;
+  letter-spacing: -0.02em;
 }
