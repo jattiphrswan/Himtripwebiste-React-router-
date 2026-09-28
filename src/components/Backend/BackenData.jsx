@@ -175,11 +175,11 @@ export const ADVENTURE_STYLES = [
     accentBorder: "border-emerald-500",
     imageUrl: trekkingImg,
     stats: {
-      difficulty: "Moderate to Challenging",
-      bestSeason: "March – June & September – December",
+      difficulty: "Moderate - Hard",
+      bestSeason: "Mar–Jun & Sep–Dec",
       duration: "3 – 8 Days",
-      altitude: "Up to 14,100 ft (4,300m)",
-      idealFor: "Trekkers, Nature Lovers, Solos & Groups",
+      altitude: "Up to 14,100 ft",
+      idealFor: "Trekkers & Groups",
     },
     highlights: [
       {

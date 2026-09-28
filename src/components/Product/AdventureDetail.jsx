@@ -1,7 +1,51 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
+import {
+  Gauge,
+  Calendar,
+  Clock,
+  Mountain,
+  Users,
+  CheckCircle2,
+  Backpack,
+  Compass,
+  Trees,
+  Tent,
+  ShieldCheck,
+  Waves,
+  Footprints,
+  Binoculars,
+  Landmark,
+  Sparkles,
+  Bike,
+  Camera,
+  Flame,
+  ChevronDown,
+  ArrowRight,
+  ArrowLeft,
+  Ticket,
+  MapPin,
+  Star
+} from "lucide-react";
 import { ADVENTURE_STYLES } from "../Backend/BackenData";
 import toursData from "../Backend/BackenData";
+
+const renderHighlightIcon = (iconStr) => {
+  const icon = (iconStr || "").toLowerCase();
+  if (icon.includes("mountain")) return <Mountain className="w-6 h-6 text-orange-600" />;
+  if (icon.includes("flower") || icon.includes("leaf") || icon.includes("tree")) return <Trees className="w-6 h-6 text-orange-600" />;
+  if (icon.includes("tent") || icon.includes("camp")) return <Tent className="w-6 h-6 text-orange-600" />;
+  if (icon.includes("shield") || icon.includes("check")) return <ShieldCheck className="w-6 h-6 text-orange-600" />;
+  if (icon.includes("wave") || icon.includes("water") || icon.includes("drop")) return <Waves className="w-6 h-6 text-orange-600" />;
+  if (icon.includes("paw") || icon.includes("jeep") || icon.includes("bird")) return <Footprints className="w-6 h-6 text-orange-600" />;
+  if (icon.includes("binocular") || icon.includes("star") || icon.includes("telescope")) return <Binoculars className="w-6 h-6 text-orange-600" />;
+  if (icon.includes("house") || icon.includes("bank") || icon.includes("temple")) return <Landmark className="w-6 h-6 text-orange-600" />;
+  if (icon.includes("handshake") || icon.includes("paint") || icon.includes("bowl")) return <Sparkles className="w-6 h-6 text-orange-600" />;
+  if (icon.includes("motorcycle") || icon.includes("bike") || icon.includes("wrench")) return <Bike className="w-6 h-6 text-orange-600" />;
+  if (icon.includes("camera")) return <Camera className="w-6 h-6 text-orange-600" />;
+  if (icon.includes("fire")) return <Flame className="w-6 h-6 text-orange-600" />;
+  return <Compass className="w-6 h-6 text-orange-600" />;
+};
 
 const formatINR = (price) =>
   price !== null ? `₹${price.toLocaleString("en-IN")}` : "";
@@ -139,62 +183,92 @@ export default function AdventureDetail() {
 
       {/* Quick Stats Bar */}
       <section className="relative -mt-8 z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-4 sm:p-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-          <div className="flex items-center gap-3 p-2 border-r border-gray-100 last:border-none">
-            <div className="w-10 h-10 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center shrink-0">
-              <i className="ph-bold ph-gauge text-xl"></i>
+        <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-3 sm:p-5 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 overflow-hidden">
+          {/* Difficulty */}
+          <div className="bg-gray-50/80 hover:bg-orange-50/40 rounded-xl p-3 border border-gray-100/80 flex items-center gap-3 min-w-0 transition-colors">
+            <div className="w-10 h-10 rounded-lg bg-orange-100 flex items-center justify-center shrink-0 shadow-sm">
+              <Gauge className="w-5 h-5 text-orange-600" />
             </div>
-            <div>
-              <span className="block text-xs text-gray-500 font-medium">Difficulty</span>
-              <span className="block text-sm font-bold text-gray-900 truncate">
+            <div className="min-w-0 flex-1">
+              <span className="block text-[11px] uppercase tracking-wider text-gray-500 font-semibold truncate">
+                Difficulty
+              </span>
+              <span
+                className="block text-sm font-bold text-gray-900 truncate"
+                title={adventure.stats?.difficulty || "Moderate"}
+              >
                 {adventure.stats?.difficulty || "Moderate"}
               </span>
             </div>
           </div>
 
-          <div className="flex items-center gap-3 p-2 border-r border-gray-100 last:border-none">
-            <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
-              <i className="ph-bold ph-calendar text-xl"></i>
+          {/* Best Season */}
+          <div className="bg-gray-50/80 hover:bg-blue-50/40 rounded-xl p-3 border border-gray-100/80 flex items-center gap-3 min-w-0 transition-colors">
+            <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center shrink-0 shadow-sm">
+              <Calendar className="w-5 h-5 text-blue-600" />
             </div>
-            <div>
-              <span className="block text-xs text-gray-500 font-medium">Best Season</span>
-              <span className="block text-sm font-bold text-gray-900 truncate">
+            <div className="min-w-0 flex-1">
+              <span className="block text-[11px] uppercase tracking-wider text-gray-500 font-semibold truncate">
+                Best Season
+              </span>
+              <span
+                className="block text-sm font-bold text-gray-900 truncate"
+                title={adventure.stats?.bestSeason || "All Year"}
+              >
                 {adventure.stats?.bestSeason || "All Year"}
               </span>
             </div>
           </div>
 
-          <div className="flex items-center gap-3 p-2 border-r border-gray-100 last:border-none">
-            <div className="w-10 h-10 rounded-xl bg-green-100 text-green-600 flex items-center justify-center shrink-0">
-              <i className="ph-bold ph-clock text-xl"></i>
+          {/* Ideal Duration */}
+          <div className="bg-gray-50/80 hover:bg-green-50/40 rounded-xl p-3 border border-gray-100/80 flex items-center gap-3 min-w-0 transition-colors">
+            <div className="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center shrink-0 shadow-sm">
+              <Clock className="w-5 h-5 text-green-600" />
             </div>
-            <div>
-              <span className="block text-xs text-gray-500 font-medium">Ideal Duration</span>
-              <span className="block text-sm font-bold text-gray-900 truncate">
+            <div className="min-w-0 flex-1">
+              <span className="block text-[11px] uppercase tracking-wider text-gray-500 font-semibold truncate">
+                Duration
+              </span>
+              <span
+                className="block text-sm font-bold text-gray-900 truncate"
+                title={adventure.stats?.duration || "3 - 7 Days"}
+              >
                 {adventure.stats?.duration || "3 - 7 Days"}
               </span>
             </div>
           </div>
 
-          <div className="flex items-center gap-3 p-2 border-r border-gray-100 last:border-none">
-            <div className="w-10 h-10 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center shrink-0">
-              <i className="ph-bold ph-mountains text-xl"></i>
+          {/* Altitude / Terrain */}
+          <div className="bg-gray-50/80 hover:bg-purple-50/40 rounded-xl p-3 border border-gray-100/80 flex items-center gap-3 min-w-0 transition-colors">
+            <div className="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center shrink-0 shadow-sm">
+              <Mountain className="w-5 h-5 text-purple-600" />
             </div>
-            <div>
-              <span className="block text-xs text-gray-500 font-medium">Altitude / Terrain</span>
-              <span className="block text-sm font-bold text-gray-900 truncate">
+            <div className="min-w-0 flex-1">
+              <span className="block text-[11px] uppercase tracking-wider text-gray-500 font-semibold truncate">
+                Altitude
+              </span>
+              <span
+                className="block text-sm font-bold text-gray-900 truncate"
+                title={adventure.stats?.altitude || "Himalayan"}
+              >
                 {adventure.stats?.altitude || "Himalayan"}
               </span>
             </div>
           </div>
 
-          <div className="col-span-2 sm:col-span-1 flex items-center gap-3 p-2">
-            <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center shrink-0">
-              <i className="ph-bold ph-users-three text-xl"></i>
+          {/* Ideal For */}
+          <div className="col-span-2 sm:col-span-1 bg-gray-50/80 hover:bg-amber-50/40 rounded-xl p-3 border border-gray-100/80 flex items-center gap-3 min-w-0 transition-colors">
+            <div className="w-10 h-10 rounded-lg bg-amber-100 flex items-center justify-center shrink-0 shadow-sm">
+              <Users className="w-5 h-5 text-amber-600" />
             </div>
-            <div>
-              <span className="block text-xs text-gray-500 font-medium">Ideal For</span>
-              <span className="block text-sm font-bold text-gray-900 truncate">
+            <div className="min-w-0 flex-1">
+              <span className="block text-[11px] uppercase tracking-wider text-gray-500 font-semibold truncate">
+                Ideal For
+              </span>
+              <span
+                className="block text-sm font-bold text-gray-900 truncate"
+                title={adventure.stats?.idealFor || "All Travelers"}
+              >
                 {adventure.stats?.idealFor || "All Travelers"}
               </span>
             </div>
@@ -224,24 +298,24 @@ export default function AdventureDetail() {
             {/* Inclusions checklist preview */}
             <div className="p-5 bg-orange-50 rounded-2xl border border-orange-100">
               <h4 className="font-bold text-orange-900 text-sm mb-3 flex items-center gap-2">
-                <i className="ph-bold ph-shield-check text-orange-600 text-lg"></i>
+                <ShieldCheck className="w-5 h-5 text-orange-600" />
                 HimTrip Certified Standards on Every Departure:
               </h4>
               <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs sm:text-sm text-gray-700">
                 <li className="flex items-center gap-2">
-                  <i className="ph-bold ph-check-circle text-green-600 text-base"></i>
+                  <CheckCircle2 className="w-4 h-4 text-green-600 shrink-0" />
                   <span>Certified Mountain Guides & Leaders</span>
                 </li>
                 <li className="flex items-center gap-2">
-                  <i className="ph-bold ph-check-circle text-green-600 text-base"></i>
+                  <CheckCircle2 className="w-4 h-4 text-green-600 shrink-0" />
                   <span>Full Medical Oxygen & First-Aid Ready</span>
                 </li>
                 <li className="flex items-center gap-2">
-                  <i className="ph-bold ph-check-circle text-green-600 text-base"></i>
+                  <CheckCircle2 className="w-4 h-4 text-green-600 shrink-0" />
                   <span>All Forest Permits & Insurance Included</span>
                 </li>
                 <li className="flex items-center gap-2">
-                  <i className="ph-bold ph-check-circle text-green-600 text-base"></i>
+                  <CheckCircle2 className="w-4 h-4 text-green-600 shrink-0" />
                   <span>Warm Nutritious Local Pahadi Meals</span>
                 </li>
               </ul>
@@ -256,8 +330,8 @@ export default function AdventureDetail() {
                   key={index}
                   className="p-5 bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition duration-200 flex gap-4 items-start"
                 >
-                  <div className="w-12 h-12 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center shrink-0">
-                    <i className={`ph-bold ${highlight.icon} text-2xl`}></i>
+                  <div className="w-12 h-12 rounded-xl bg-orange-100 flex items-center justify-center shrink-0">
+                    {renderHighlightIcon(highlight.icon)}
                   </div>
                   <div>
                     <h3 className="font-bold text-gray-900 text-base mb-1">
