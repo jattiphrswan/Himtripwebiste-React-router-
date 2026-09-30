@@ -2,161 +2,498 @@ import React, { useState, useMemo, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import himImage from "../../assets/places/kedarnath.png";
 import toursData from "../Backend/BackenData";
+import {
+  MapPin,
+  Clock,
+  Star,
+  Heart,
+  Sparkles,
+  ArrowRight,
+  ShieldCheck,
+  Zap,
+  Eye,
+  X,
+  Compass,
+  CheckCircle2,
+  Tag,
+  Flame,
+  SlidersHorizontal,
+  RotateCcw,
+  Filter,
+  ChevronDown,
+  Check,
+  Search,
+  Calendar,
+} from "lucide-react";
 
 const initialTours = toursData;
 
-// --- Helpers ---
+// Price formatter
 const formatINR = (price) =>
-  price !== null ? `₹${price.toLocaleString("en-IN")}` : null;
+  price !== null && price !== undefined
+    ? `₹${price.toLocaleString("en-IN")}`
+    : null;
 
-const renderStars = (rating) => {
-  const stars = [];
-  for (let i = 1; i <= 5; i++) {
-    if (rating >= i)
-      stars.push(<i key={i} className="ph-fill ph-star text-base"></i>);
-    else if (rating > i - 1)
-      stars.push(<i key={i} className="ph-half-fill ph-star text-base"></i>);
-    else
-      stars.push(
-        <i key={i} className="ph ph-star text-base text-gray-300"></i>
-      );
+// Tour highlights generator
+const getTourHighlights = (tour) => {
+  const category = (tour.category || "").toLowerCase();
+  const style = (tour.style || "").toLowerCase();
+
+  if (category.includes("pilgrim") || style.includes("pilgrim")) {
+    return ["VIP Darshan Assist", "Sattvic Meals & Stay", "Priest Guided"];
   }
-  return stars;
+  if (category.includes("trek") || style.includes("trek")) {
+    return ["Certified Mountain Guide", "Warm Tents & Gear", "Medical Oxygen"];
+  }
+  if (category.includes("adventure") || style.includes("sports")) {
+    return ["Grade III/IV Rapids", "Certified IRF Captains", "Riverside Camp"];
+  }
+  return ["Private Mountain Cab", "Lakeview / Valley Stay", "Family Friendly"];
 };
 
-// --- Tour Card ---
-const TourCard = ({ tour }) => {
+// --- Tour Card Component ---
+const TourCard = ({ tour, isLiked, onToggleWishlist, onQuickView }) => {
+  const discountPercent =
+    tour.originalPrice && tour.originalPrice > tour.price
+      ? Math.round(((tour.originalPrice - tour.price) / tour.originalPrice) * 100)
+      : null;
+
+  const highlights = getTourHighlights(tour);
+
   return (
-    <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition duration-300 overflow-hidden border border-gray-100 flex flex-col h-full">
-      <div className="h-40 relative overflow-hidden rounded-t-xl">
-        {tour.onSale && (
-          <span className="absolute top-2 left-2 bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded-full z-10">
-            SALE
-          </span>
-        )}
+    <div className="group relative bg-white rounded-3xl overflow-hidden border border-slate-200/90 shadow-[0_6px_25px_-6px_rgba(0,0,0,0.07)] hover:shadow-[0_24px_50px_-10px_rgba(234,88,12,0.22)] hover:-translate-y-2 transition-all duration-300 flex flex-col h-full">
+      {/* Top Accent Gradient Bar */}
+      <div className="h-1.5 w-full bg-gradient-to-r from-orange-500 via-amber-500 to-emerald-500" />
+
+      {/* Image Container with Badges */}
+      <div className="relative h-60 sm:h-64 w-full overflow-hidden bg-slate-100">
         <img
           src={tour.image}
           alt={tour.title}
-          className="w-full h-40 object-cover"
+          className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700 ease-out"
+          onError={(e) => {
+            e.currentTarget.onerror = null;
+            e.currentTarget.src =
+              "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=800&q=80";
+          }}
         />
-      </div>
 
-      <div className="p-4 flex flex-col flex-1">
-        <div className="flex items-center text-sm text-yellow-600 mb-2">
-          {renderStars(tour.rating)}
-          <span className="text-gray-500 ml-2">
-            ({tour.rating}/5 based on {tour.reviews} reviews)
+        {/* Gradient Scrim */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/40 pointer-events-none" />
+
+        {/* Top Left Badges */}
+        <div className="absolute top-3.5 left-3.5 flex flex-col gap-2 items-start z-10">
+          <span className="bg-black/60 backdrop-blur-md text-white text-[11px] font-bold px-3 py-1 rounded-full border border-white/20 tracking-wider uppercase shadow-sm">
+            {tour.category || tour.style}
           </span>
+
+          {tour.onSale && (
+            <span className="inline-flex items-center gap-1 bg-gradient-to-r from-amber-500 to-rose-500 text-white text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md">
+              <Tag className="w-3.5 h-3.5" />
+              {discountPercent ? `${discountPercent}% OFF` : "ON SALE"}
+            </span>
+          )}
         </div>
-        <h3 className="text-xl font-bold text-gray-800 mb-2 truncate">
-          {tour.title}
-        </h3>
-        <p className="text-sm text-gray-500 mb-4 flex items-center space-x-2">
-          <i className="ph-bold ph-map-pin"></i>
-          <span>{tour.destination}</span>
-        </p>
-        <div className="flex justify-between items-end border-t pt-3 mt-auto">
-          <div className="text-lg">
-            <span className="block text-sm text-gray-500">
-              Duration: {tour.duration} days
-            </span>
-            <span className="block text-sm text-gray-500">
-              Style: {tour.style}
-            </span>
-          </div>
-          <div className="text-right">
-            {tour.originalPrice && (
-              <span className="block text-xs text-gray-500 line-through">
-                {formatINR(tour.originalPrice)}
-              </span>
-            )}
-            <span
-              className={`text-2xl font-extrabold ${
-                tour.onSale ? "text-red-600" : "text-orange-600"
+
+        {/* Top Right Actions: Quick View & Wishlist */}
+        <div className="absolute top-3.5 right-3.5 flex items-center gap-2 z-10">
+          <button
+            onClick={() => onQuickView(tour)}
+            title="Quick View"
+            className="w-9 h-9 rounded-full bg-black/50 backdrop-blur-md text-white hover:bg-black/80 flex items-center justify-center border border-white/20 transition-all opacity-0 group-hover:opacity-100 cursor-pointer shadow-md"
+          >
+            <Eye className="w-4 h-4" />
+          </button>
+
+          <button
+            onClick={(e) => onToggleWishlist(e, tour.id)}
+            title={isLiked ? "Saved to favorites" : "Save to favorites"}
+            className="w-9 h-9 rounded-full bg-white/95 backdrop-blur-md text-slate-700 hover:text-rose-500 flex items-center justify-center shadow-lg transition-all active:scale-90 cursor-pointer"
+          >
+            <Heart
+              className={`w-4 h-4 transition-colors ${
+                isLiked ? "fill-rose-500 text-rose-500" : "text-slate-700"
               }`}
-            >
-              {formatINR(tour.price)}
+            />
+          </button>
+        </div>
+
+        {/* Bottom Image Stats: Duration & Location Pill */}
+        <div className="absolute bottom-3.5 left-3.5 right-3.5 flex items-center justify-between text-white text-xs font-semibold z-10">
+          <div className="inline-flex items-center gap-1.5 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/20 shadow-sm">
+            <Clock className="w-3.5 h-3.5 text-amber-300" />
+            <span>{tour.duration} Days / {tour.duration - 1 || 1} Nights</span>
+          </div>
+
+          <div className="inline-flex items-center gap-1 bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/20 text-amber-300 font-bold shadow-sm">
+            <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+            <span>{tour.rating}</span>
+            <span className="text-[10px] text-slate-300 font-normal">
+              ({tour.reviews})
             </span>
-            <span className="block text-xs text-gray-500">per person</span>
           </div>
         </div>
       </div>
 
-      <Link
-        to={`/booking/${tour.id}`}
-        className="mt-auto inline-block w-full text-center px-4 py-3 bg-orange-500 text-white font-semibold rounded-b-xl hover:bg-orange-600 transition"
-      >
-        Book Now
-      </Link>
+      {/* Card Content Section */}
+      <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between">
+        <div>
+          {/* Destination */}
+          <div className="flex items-center gap-1.5 text-xs font-bold text-orange-600 mb-2 uppercase tracking-wide">
+            <MapPin className="w-3.5 h-3.5 shrink-0 text-orange-500" />
+            <span className="truncate">{tour.destination}</span>
+          </div>
+
+          {/* Title */}
+          <h3 className="text-lg sm:text-xl font-bold text-slate-900 leading-snug line-clamp-2 font-heading mb-3 group-hover:text-orange-600 transition-colors">
+            {tour.title}
+          </h3>
+
+          {/* Feature Highlights Pills */}
+          <div className="flex flex-wrap gap-1.5 mb-5">
+            {highlights.map((item, idx) => (
+              <span
+                key={idx}
+                className="inline-flex items-center gap-1 text-[11px] font-medium text-slate-700 bg-slate-100/90 px-2.5 py-1 rounded-lg border border-slate-200/50"
+              >
+                <CheckCircle2 className="w-3 h-3 text-emerald-600 shrink-0" />
+                <span className="truncate">{item}</span>
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* Pricing & CTA Section */}
+        <div className="pt-4 border-t border-slate-100 mt-auto">
+          <div className="flex items-end justify-between mb-4">
+            <div>
+              <span className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+                Starting From
+              </span>
+              <div className="flex items-baseline gap-2">
+                <span className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight font-heading">
+                  {formatINR(tour.price)}
+                </span>
+                {tour.originalPrice && tour.originalPrice > tour.price && (
+                  <span className="text-xs text-slate-400 line-through">
+                    {formatINR(tour.originalPrice)}
+                  </span>
+                )}
+              </div>
+              <span className="block text-[11px] text-emerald-700 font-medium mt-0.5">
+                All Taxes & Permits Included
+              </span>
+            </div>
+
+            <div className="text-right">
+              <span className="inline-block text-[11px] font-bold text-orange-700 bg-orange-50 border border-orange-200/80 px-2.5 py-1 rounded-lg">
+                {tour.style}
+              </span>
+            </div>
+          </div>
+
+          {/* Dual Action Buttons */}
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              onClick={() => onQuickView(tour)}
+              className="w-full inline-flex items-center justify-center gap-1 px-3 py-2.5 rounded-xl font-bold text-xs text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors cursor-pointer"
+            >
+              <Eye className="w-3.5 h-3.5 text-slate-600" />
+              <span>Quick View</span>
+            </button>
+
+            <Link
+              to={`/booking/${tour.id}`}
+              className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl font-bold text-xs text-white bg-gradient-to-r from-orange-600 via-orange-500 to-amber-500 hover:from-orange-700 hover:to-amber-600 shadow-md shadow-orange-500/25 transition-all duration-200 active:scale-95"
+            >
+              <span>Book Now</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
 
-// --- App Component ---
-export default function App() {
-  const [searchParams] = useSearchParams();
+// --- Quick View Modal Component ---
+const QuickViewModal = ({ tour, onClose, onToggleWishlist, isLiked }) => {
+  if (!tour) return null;
+
+  const discountPercent =
+    tour.originalPrice && tour.originalPrice > tour.price
+      ? Math.round(((tour.originalPrice - tour.price) / tour.originalPrice) * 100)
+      : null;
+
+  const highlights = getTourHighlights(tour);
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs animate-fadeIn">
+      <div
+        className="relative bg-white rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl border border-slate-200 max-h-[90vh] flex flex-col"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Close Button */}
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center cursor-pointer transition-colors"
+        >
+          <X className="w-5 h-5" />
+        </button>
+
+        {/* Modal Header Image */}
+        <div className="relative h-64 sm:h-72 w-full overflow-hidden shrink-0">
+          <img
+            src={tour.image}
+            alt={tour.title}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
+
+          <div className="absolute bottom-4 left-6 right-6 text-white">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="px-3 py-1 rounded-full bg-orange-600 text-white text-xs font-bold uppercase tracking-wider">
+                {tour.category || tour.style}
+              </span>
+              {discountPercent && (
+                <span className="px-3 py-1 rounded-full bg-rose-600 text-white text-xs font-bold uppercase tracking-wider">
+                  {discountPercent}% OFF
+                </span>
+              )}
+            </div>
+            <h3 className="text-xl sm:text-2xl font-bold font-heading">
+              {tour.title}
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-300 flex items-center gap-1.5 mt-1">
+              <MapPin className="w-3.5 h-3.5 text-orange-400" />
+              <span>{tour.destination}</span>
+            </p>
+          </div>
+        </div>
+
+        {/* Modal Scrollable Body */}
+        <div className="p-6 overflow-y-auto space-y-6">
+          {/* Quick Metrics */}
+          <div className="grid grid-cols-3 gap-3 p-4 rounded-2xl bg-slate-50 border border-slate-200/80 text-center">
+            <div>
+              <span className="block text-[11px] font-bold text-slate-400 uppercase">Duration</span>
+              <span className="text-sm sm:text-base font-bold text-slate-900 font-heading">
+                {tour.duration} Days
+              </span>
+            </div>
+            <div>
+              <span className="block text-[11px] font-bold text-slate-400 uppercase">Style</span>
+              <span className="text-sm sm:text-base font-bold text-slate-900 font-heading">
+                {tour.style}
+              </span>
+            </div>
+            <div>
+              <span className="block text-[11px] font-bold text-slate-400 uppercase">Rating</span>
+              <span className="text-sm sm:text-base font-bold text-amber-600 font-heading flex items-center justify-center gap-1">
+                <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+                {tour.rating} ({tour.reviews})
+              </span>
+            </div>
+          </div>
+
+          {/* Included In This Expedition */}
+          <div>
+            <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-3 font-heading">
+              Key Highlights & Inclusions
+            </h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              {highlights.map((h, i) => (
+                <div key={i} className="flex items-center gap-2 text-xs font-medium text-slate-700">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                  <span>{h}</span>
+                </div>
+              ))}
+              <div className="flex items-center gap-2 text-xs font-medium text-slate-700">
+                <ShieldCheck className="w-4 h-4 text-orange-500 shrink-0" />
+                <span>NIM / IMF Mountain Certified Captain</span>
+              </div>
+              <div className="flex items-center gap-2 text-xs font-medium text-slate-700">
+                <Zap className="w-4 h-4 text-amber-500 shrink-0" />
+                <span>24/7 Mountain SOS & Concierge</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Price & Booking Footer */}
+          <div className="pt-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div>
+              <span className="text-xs text-slate-500">Price per traveler:</span>
+              <div className="flex items-baseline gap-2">
+                <span className="text-3xl font-black text-slate-900 font-heading">
+                  {formatINR(tour.price)}
+                </span>
+                {tour.originalPrice && (
+                  <span className="text-sm text-slate-400 line-through">
+                    {formatINR(tour.originalPrice)}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 w-full sm:w-auto">
+              <button
+                onClick={(e) => onToggleWishlist(e, tour.id)}
+                className="p-3 rounded-xl border border-slate-300 hover:border-rose-400 text-slate-700 hover:text-rose-500 transition-colors cursor-pointer"
+              >
+                <Heart
+                  className={`w-5 h-5 ${
+                    isLiked ? "fill-rose-500 text-rose-500" : ""
+                  }`}
+                />
+              </button>
+
+              <Link
+                to={`/booking/${tour.id}`}
+                onClick={onClose}
+                className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-bold text-sm shadow-lg shadow-orange-600/30 transition-all active:scale-95"
+              >
+                <span>Proceed to Booking</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// --- Main TourSearchResults Component ---
+export default function TourSearchResults() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const initialWhere = searchParams.get("where") || "Anywhere in Uttarakhand";
   const initialAdv = searchParams.get("adventure");
   const initialDuration = parseInt(searchParams.get("duration")) || 15;
+  const initialQuery = searchParams.get("q") || "";
 
   const [filters, setFilters] = useState({
+    search: initialQuery,
     destination: initialWhere,
     styles: initialAdv ? [initialAdv] : [],
     duration: initialDuration,
     maxBudget: 0,
     sort: "Relevance",
   });
-  const [message, setMessage] = useState(null);
+
   const [showFilters, setShowFilters] = useState(false);
+  const [wishlist, setWishlist] = useState({});
+  const [quickViewTour, setQuickViewTour] = useState(null);
 
   useEffect(() => {
     const where = searchParams.get("where");
     const adv = searchParams.get("adventure");
     const dur = searchParams.get("duration");
-    if (where || adv || dur) {
+    const q = searchParams.get("q");
+
+    if (where || adv || dur || q) {
       setFilters((prev) => ({
         ...prev,
         destination: where || prev.destination,
         styles: adv ? [adv] : prev.styles,
         duration: dur ? parseInt(dur) : prev.duration,
+        search: q || prev.search,
       }));
     }
   }, [searchParams]);
 
-  const alertMessage = (msg) => {
-    setMessage({ type: "info", text: msg });
-    setTimeout(() => setMessage(null), 3000);
+  const handleFilterChange = (name, value) => {
+    setFilters((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleFilterChange = (name, value) =>
-    setFilters((prev) => ({ ...prev, [name]: value }));
-
-  const handleStyleToggle = (style) =>
+  const handleStyleToggle = (style) => {
     setFilters((prev) => ({
       ...prev,
       styles: prev.styles.includes(style)
         ? prev.styles.filter((s) => s !== style)
         : [...prev.styles, style],
     }));
+  };
 
-  const handleToggleFilters = () => setShowFilters((prev) => !prev);
+  const handleResetFilters = () => {
+    setFilters({
+      search: "",
+      destination: "Anywhere in Uttarakhand",
+      styles: [],
+      duration: 15,
+      maxBudget: 0,
+      sort: "Relevance",
+    });
+  };
 
+  const handleToggleWishlist = (e, tourId) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setWishlist((prev) => ({
+      ...prev,
+      [tourId]: !prev[tourId],
+    }));
+  };
+
+  const destinationsList = [
+    "Anywhere in Uttarakhand",
+    "Kedarnath",
+    "Rishikesh",
+    "Nainital",
+    "Auli",
+    "Dehradun",
+    "Almora",
+    "Mussoorie",
+  ];
+
+  const styleOptions = [
+    { label: "Pilgrimage", icon: "🛕" },
+    { label: "Trekking", icon: "🥾" },
+    { label: "Adventure Sports", icon: "🌊" },
+    { label: "Family", icon: "👨‍👩‍👧" },
+    { label: "Winter Sports", icon: "❄️" },
+    { label: "Sightseeing", icon: "🏔️" },
+  ];
+
+  // Filtering & Sorting
   const filteredAndSortedTours = useMemo(() => {
     let results = initialTours.filter((tour) => {
+      // Search text
+      if (filters.search.trim()) {
+        const query = filters.search.toLowerCase();
+        const matchesTitle = tour.title.toLowerCase().includes(query);
+        const matchesDest = tour.destination.toLowerCase().includes(query);
+        const matchesStyle = (tour.style || "").toLowerCase().includes(query);
+        const matchesCat = (tour.category || "").toLowerCase().includes(query);
+        if (!matchesTitle && !matchesDest && !matchesStyle && !matchesCat) {
+          return false;
+        }
+      }
+
+      // Tour style
       const meetsStyle =
         filters.styles.length === 0 || filters.styles.includes(tour.style);
+
+      // Budget
       const meetsBudget =
         filters.maxBudget === 0 || tour.price <= filters.maxBudget;
+
+      // Destination
       const meetsDestination =
         filters.destination === "Anywhere in Uttarakhand" ||
-        tour.destination.includes(filters.destination);
+        tour.destination.toLowerCase().includes(filters.destination.toLowerCase());
+
+      // Duration
       const meetsDuration = tour.duration <= filters.duration;
+
       return meetsStyle && meetsBudget && meetsDestination && meetsDuration;
     });
 
     switch (filters.sort) {
       case "Price (Low to High)":
         results.sort((a, b) => a.price - b.price);
+        break;
+      case "Price (High to Low)":
+        results.sort((a, b) => b.price - a.price);
         break;
       case "Duration (Shortest)":
         results.sort((a, b) => a.duration - b.duration);
@@ -171,218 +508,424 @@ export default function App() {
     return results;
   }, [filters]);
 
+  const activeFiltersCount =
+    (filters.search ? 1 : 0) +
+    (filters.destination !== "Anywhere in Uttarakhand" ? 1 : 0) +
+    filters.styles.length +
+    (filters.duration < 15 ? 1 : 0) +
+    (filters.maxBudget > 0 ? 1 : 0);
+
   return (
-    <div className="w-full bg-white pt-16">
-      {message && (
-        <div className=" top-4 right-4 bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4 shadow-xl rounded-lg z-50">
-          {message.text}
-        </div>
-      )}
+    <div className="w-full min-h-screen bg-slate-50 font-sans pb-16">
+      {/* 1. Dramatic Hero Header Banner */}
+      <div className="relative w-full overflow-hidden bg-slate-950 text-white pt-24 sm:pt-28 pb-16 sm:pb-20 px-4 sm:px-6 lg:px-8">
+        <div
+          className="absolute inset-0 bg-cover bg-center opacity-40 scale-105"
+          style={{ backgroundImage: `url(${himImage})` }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/75 to-slate-950/50" />
+        <div className="absolute inset-0 bg-[radial-gradient(#EA580C_1px,transparent_1px)] [background-size:24px_24px] opacity-15 pointer-events-none" />
 
-      <header
-        className="relative bg-cover bg-center bg-no-repeat text-white p-6 sm:p-8 rounded-b-3xl shadow-lg w-full z-20"
-        style={{ backgroundImage: `url(${himImage})` }}
-      >
-        <div className="absolute inset-0 bg-black/40 rounded-b-3xl"></div>
+        <div className="relative z-10 max-w-5xl mx-auto text-center space-y-4">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-600/30 backdrop-blur-md border border-orange-400/40 text-orange-200 text-xs sm:text-sm font-bold uppercase tracking-wider mb-1 animate-fadeUp">
+            <Flame className="w-4 h-4 text-orange-400 animate-pulse" />
+            <span>Discover Devbhoomi Uttarakhand</span>
+          </div>
 
-        <div className="relative flex flex-col justify-center items-center text-center gap-4">
-          <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-white drop-shadow-lg">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-yellow-300 via-white to-yellow-100">
-              Uttarakhand Adventure Search
-            </span>
-            <span className="block text-lg sm:text-2xl text-white mt-1 font-semibold">
-              (HimTrip)
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight font-heading animate-fadeUp">
+            Find Your Perfect{" "}
+            <span className="bg-gradient-to-r from-orange-400 via-amber-300 to-emerald-400 bg-clip-text text-transparent">
+              Himalayan Escape
             </span>
           </h1>
-        </div>
 
-        <div className="relative inline-block bg-white/20 backdrop-blur-sm px-4 py-1 rounded-full text-sm text-white font-medium shadow-sm animate-pulse">
-          Found {filteredAndSortedTours.length} adventure
-          {filteredAndSortedTours.length !== 1 && "s"} in the Himalayas
-        </div>
-      </header>
+          <p className="text-sm sm:text-base text-slate-300 max-w-2xl mx-auto font-light leading-relaxed animate-fadeUp">
+            Explore handcrafted temple yatras, high-altitude alpine treks, river rafting camps, and serene valley retreats.
+          </p>
 
-      <div className="pt-8">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+          {/* Integrated Live Search Input Bar */}
+          <div className="max-w-2xl mx-auto pt-3 animate-fadeUp">
+            <div className="relative flex items-center bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-slate-200/90 p-1.5 focus-within:ring-2 focus-within:ring-orange-500">
+              <Search className="w-5 h-5 text-slate-400 ml-3 shrink-0" />
+              <input
+                type="text"
+                placeholder="Search by circuit, temple or trek (e.g. Kedarnath, Auli, Rafting, Valley of Flowers)..."
+                value={filters.search}
+                onChange={(e) => handleFilterChange("search", e.target.value)}
+                className="w-full px-3 py-2.5 bg-transparent text-slate-900 placeholder-slate-400 text-sm focus:outline-none"
+              />
+              {filters.search && (
+                <button
+                  onClick={() => handleFilterChange("search", "")}
+                  className="p-1.5 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-600 cursor-pointer mr-1"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Result Counter Pill */}
+          <div className="pt-2">
+            <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-xs text-white font-medium shadow-sm">
+              <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+              <span>Found {filteredAndSortedTours.length} Verified Uttarakhand Expeditions</span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* 2. Main Container: Sidebar + Tours Grid */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Mobile Filter Toggle Drawer Overlay */}
+          {showFilters && (
+            <div
+              className="fixed inset-0 bg-black/50 z-40 lg:hidden backdrop-blur-xs"
+              onClick={() => setShowFilters(false)}
+            />
+          )}
+
+          {/* Left Sidebar Filter Panel (4 cols on lg) */}
           <aside
-            className={`${
-              showFilters ? "translate-x-0" : "-translate-x-full"
-            } lg:translate-x-0 transition-transform duration-300 fixed lg:static inset-y-0 left-0 w-80 lg:w-full max-w-xs bg-white lg:bg-gray-50 p-4 rounded-lg shadow-2xl lg:shadow-inner lg:sticky lg:top-4 h-fit overflow-y-auto z-40`}
+            className={`fixed inset-y-0 left-0 z-50 w-80 max-w-full bg-white p-6 shadow-2xl transition-transform duration-300 overflow-y-auto lg:static lg:z-10 lg:w-auto lg:p-6 lg:rounded-3xl lg:border lg:border-slate-200/90 lg:shadow-[0_8px_30px_rgb(0,0,0,0.04)] lg:col-span-4 xl:col-span-3 ${
+              showFilters ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+            }`}
           >
-            <div className="flex justify-between items-center lg:hidden border-b pb-2 mb-4">
-              <h2 className="text-xl font-semibold text-orange-700">Filters</h2>
-              <button
-                onClick={handleToggleFilters}
-                className="text-gray-700 p-1 rounded-full hover:bg-gray-100"
-              >
-                <i className="ph ph-x text-2xl"></i>
-              </button>
-            </div>
+            {/* Sidebar Header */}
+            <div className="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
+              <div className="flex items-center gap-2 text-slate-900 font-bold font-heading">
+                <SlidersHorizontal className="w-5 h-5 text-orange-600" />
+                <span className="text-lg">Filter Expeditions</span>
+              </div>
 
-            <h2 className="hidden lg:block text-xl font-semibold text-orange-700 mb-4 border-b pb-2 border-orange-200">
-              Filter Your Journey in Uttarakhand
-            </h2>
-
-            {/* Destination */}
-            <div className="mb-5">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Destination (Town/Region)
-              </label>
-              <select
-                className="form-input w-full p-2 border border-gray-300 rounded-lg"
-                value={filters.destination}
-                onChange={(e) =>
-                  handleFilterChange("destination", e.target.value)
-                }
-              >
-                <option>Anywhere in Uttarakhand</option>
-                <option>Rishikesh</option>
-                <option>Kedarnath</option>
-                <option>Nainital</option>
-                <option>Auli</option>
-                <option>Dehradun</option>
-              </select>
-            </div>
-
-            {/* Style */}
-            <div className="mb-5">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Tour Style
-              </label>
-              <div className="space-y-2">
-                {[
-                  "Pilgrimage",
-                  "Trekking",
-                  "Adventure Sports",
-                  "Family",
-                  "Winter Sports",
-                  "Sightseeing",
-                ].map((style) => (
-                  <label
-                    key={style}
-                    className="flex items-center text-sm text-gray-600 cursor-pointer"
+              <div className="flex items-center gap-2">
+                {activeFiltersCount > 0 && (
+                  <button
+                    onClick={handleResetFilters}
+                    className="inline-flex items-center gap-1 text-xs font-semibold text-orange-600 hover:text-orange-700 cursor-pointer"
                   >
-                    <input
-                      type="checkbox"
-                      checked={filters.styles.includes(style)}
-                      onChange={() => handleStyleToggle(style)}
-                      className="form-checkbox text-orange-600 rounded"
-                    />
-                    <span className="ml-2">{style}</span>
+                    <RotateCcw className="w-3 h-3" />
+                    <span>Reset</span>
+                  </button>
+                )}
+                <button
+                  onClick={() => setShowFilters(false)}
+                  className="p-1 rounded-lg text-slate-400 hover:text-slate-700 lg:hidden"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              {/* Destination Filter */}
+              <div>
+                <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider mb-2 font-heading">
+                  Destination (Town / Region)
+                </label>
+                <div className="relative">
+                  <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-orange-500 pointer-events-none" />
+                  <select
+                    value={filters.destination}
+                    onChange={(e) => handleFilterChange("destination", e.target.value)}
+                    className="w-full pl-9 pr-8 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-xs sm:text-sm font-medium focus:outline-none focus:border-orange-500 focus:bg-white transition-colors cursor-pointer appearance-none"
+                  >
+                    {destinationsList.map((dest) => (
+                      <option key={dest} value={dest}>
+                        {dest}
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                </div>
+              </div>
+
+              {/* Tour Style Filter (Chips) */}
+              <div>
+                <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider mb-2.5 font-heading">
+                  Expedition Style
+                </label>
+                <div className="space-y-2">
+                  {styleOptions.map((item) => {
+                    const isChecked = filters.styles.includes(item.label);
+                    const count = initialTours.filter(
+                      (t) => t.style === item.label
+                    ).length;
+
+                    return (
+                      <label
+                        key={item.label}
+                        onClick={() => handleStyleToggle(item.label)}
+                        className={`flex items-center justify-between p-2.5 rounded-xl border text-xs font-medium cursor-pointer transition-all duration-200 select-none ${
+                          isChecked
+                            ? "bg-orange-50/80 border-orange-300 text-orange-900 shadow-xs"
+                            : "bg-slate-50/60 border-slate-200/80 text-slate-700 hover:bg-slate-100/70"
+                        }`}
+                      >
+                        <div className="flex items-center gap-2">
+                          <div
+                            className={`w-4 h-4 rounded flex items-center justify-center border transition-colors ${
+                              isChecked
+                                ? "bg-orange-600 border-orange-600 text-white"
+                                : "border-slate-300 bg-white"
+                            }`}
+                          >
+                            {isChecked && <Check className="w-3 h-3 stroke-[3]" />}
+                          </div>
+                          <span>{item.icon}</span>
+                          <span className="font-semibold">{item.label}</span>
+                        </div>
+                        <span className="text-[11px] text-slate-400 font-bold">
+                          {count}
+                        </span>
+                      </label>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Duration Slider Filter */}
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <label className="text-xs font-bold text-slate-800 uppercase tracking-wider font-heading">
+                    Max Duration
                   </label>
-                ))}
+                  <span className="text-xs font-bold text-orange-600 bg-orange-50 px-2 py-0.5 rounded-md border border-orange-200">
+                    Up to {filters.duration} Days
+                  </span>
+                </div>
+                <input
+                  type="range"
+                  min="2"
+                  max="15"
+                  value={filters.duration}
+                  onChange={(e) =>
+                    handleFilterChange("duration", parseInt(e.target.value))
+                  }
+                  className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-orange-600"
+                />
+                <div className="flex justify-between text-[11px] font-semibold text-slate-400 mt-1">
+                  <span>2 Days (Weekend)</span>
+                  <span>15+ Days</span>
+                </div>
               </div>
-            </div>
 
-            {/* Duration */}
-            <div className="mb-5">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Duration: {filters.duration} Days
-              </label>
-              <input
-                type="range"
-                min="1"
-                max="15"
-                value={filters.duration}
-                onChange={(e) =>
-                  handleFilterChange("duration", parseInt(e.target.value))
-                }
-                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-              />
-              <div className="flex justify-between text-xs text-gray-500 mt-1">
-                <span>1</span>
-                <span>15+</span>
+              {/* Budget Filter */}
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <label className="text-xs font-bold text-slate-800 uppercase tracking-wider font-heading">
+                    Budget Limit
+                  </label>
+                  <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
+                    {filters.maxBudget === 0
+                      ? "Any Budget"
+                      : `Under ${formatINR(filters.maxBudget)}`}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-3 gap-1.5 mb-2.5">
+                  <button
+                    onClick={() => handleFilterChange("maxBudget", 0)}
+                    className={`py-1.5 px-2 rounded-lg text-xs font-bold transition-colors cursor-pointer border ${
+                      filters.maxBudget === 0
+                        ? "bg-slate-900 text-white border-slate-900"
+                        : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
+                    }`}
+                  >
+                    Any
+                  </button>
+                  <button
+                    onClick={() => handleFilterChange("maxBudget", 15000)}
+                    className={`py-1.5 px-2 rounded-lg text-xs font-bold transition-colors cursor-pointer border ${
+                      filters.maxBudget === 15000
+                        ? "bg-slate-900 text-white border-slate-900"
+                        : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
+                    }`}
+                  >
+                    &lt; ₹15k
+                  </button>
+                  <button
+                    onClick={() => handleFilterChange("maxBudget", 30000)}
+                    className={`py-1.5 px-2 rounded-lg text-xs font-bold transition-colors cursor-pointer border ${
+                      filters.maxBudget === 30000
+                        ? "bg-slate-900 text-white border-slate-900"
+                        : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
+                    }`}
+                  >
+                    &lt; ₹30k
+                  </button>
+                </div>
               </div>
-            </div>
 
-            {/* Budget */}
-            <div className="mb-5">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Max Budget (₹)
-              </label>
-              <input
-                type="number"
-                placeholder="Max Price (e.g., 40000)"
-                className="form-input w-full p-2 border border-gray-300 rounded-lg"
-                value={filters.maxBudget}
-                onChange={(e) =>
-                  handleFilterChange("maxBudget", parseInt(e.target.value) || 0)
-                }
-              />
+              {/* Reset All Button */}
+              {activeFiltersCount > 0 && (
+                <button
+                  onClick={handleResetFilters}
+                  className="w-full py-2.5 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 font-bold text-xs uppercase tracking-wider transition-colors cursor-pointer flex items-center justify-center gap-1.5"
+                >
+                  <RotateCcw className="w-3.5 h-3.5 text-slate-500" />
+                  <span>Clear All Filters</span>
+                </button>
+              )}
             </div>
-
-            <button
-              onClick={() => {
-                alertMessage(
-                  `Filters applied: Destination=${filters.destination}, Budget=${formatINR(
-                    filters.maxBudget
-                  )}`
-                );
-                handleToggleFilters();
-              }}
-              className="w-full py-2 mt-2 bg-orange-500 text-white font-semibold rounded-lg hover:bg-orange-600 transition focus:outline-none focus:ring-4 focus:ring-orange-300"
-            >
-              Apply Filters
-            </button>
           </aside>
 
-          {/* Tour Cards */}
-          <main className="lg:col-span-3 space-y-4 w-full">
-            <div className="lg:hidden">
-              <button
-                onClick={handleToggleFilters}
-                className="w-full py-2 bg-orange-100 text-orange-700 font-semibold rounded-lg hover:bg-orange-200 transition flex items-center justify-center space-x-2 border border-orange-300"
-              >
-                <i className="ph ph-sliders-horizontal text-lg"></i>
-                <span>Filter Tours</span>
-              </button>
-            </div>
+          {/* Main Tours Grid & Top Bar (8 cols on lg, 9 on xl) */}
+          <main className="lg:col-span-8 xl:col-span-9 space-y-6">
+            {/* Top Control Bar: Mobile trigger, result count & sort */}
+            <div className="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+              {/* Mobile Filter Button */}
+              <div className="flex items-center justify-between w-full sm:w-auto gap-3">
+                <button
+                  onClick={() => setShowFilters(true)}
+                  className="inline-flex lg:hidden items-center gap-2 px-4 py-2 rounded-xl bg-orange-50 border border-orange-200 text-orange-700 font-bold text-xs cursor-pointer"
+                >
+                  <SlidersHorizontal className="w-4 h-4" />
+                  <span>Filter Tours ({activeFiltersCount})</span>
+                </button>
 
-            {/* Sort */}
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-3 bg-white border border-gray-200 rounded-lg shadow-sm">
-              <p className="text-sm text-gray-600 mb-2 sm:mb-0">
-                Showing {filteredAndSortedTours.length} Uttarakhand tours
-              </p>
-              <div className="flex items-center space-x-2">
-                <label
-                  htmlFor="sort"
-                  className="text-sm text-gray-600 whitespace-nowrap"
-                >
-                  Sort by:
-                </label>
-                <select
-                  id="sort"
-                  className="form-input p-1 border border-gray-300 rounded-lg text-sm appearance-none bg-white"
-                  value={filters.sort}
-                  onChange={(e) => handleFilterChange("sort", e.target.value)}
-                >
-                  <option>Relevance</option>
-                  <option>Price (Low to High)</option>
-                  <option>Duration (Shortest)</option>
-                  <option>Reviews</option>
-                </select>
+                <p className="text-xs sm:text-sm font-semibold text-slate-700">
+                  Showing <span className="font-bold text-orange-600">{filteredAndSortedTours.length}</span> of {initialTours.length} tours
+                </p>
+              </div>
+
+              {/* Sort By Dropdown */}
+              <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+                <span className="text-xs font-semibold text-slate-500 whitespace-nowrap">
+                  Sort By:
+                </span>
+                <div className="relative">
+                  <select
+                    value={filters.sort}
+                    onChange={(e) => handleFilterChange("sort", e.target.value)}
+                    className="pl-3 pr-8 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-semibold text-slate-800 focus:outline-none focus:border-orange-500 cursor-pointer appearance-none"
+                  >
+                    <option>Relevance</option>
+                    <option>Price (Low to High)</option>
+                    <option>Price (High to Low)</option>
+                    <option>Duration (Shortest)</option>
+                    <option>Reviews</option>
+                  </select>
+                  <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                </div>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+            {/* Active Filters Pills Strip */}
+            {activeFiltersCount > 0 && (
+              <div className="flex flex-wrap items-center gap-2 animate-fadeIn">
+                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                  Active:
+                </span>
+
+                {filters.destination !== "Anywhere in Uttarakhand" && (
+                  <span className="inline-flex items-center gap-1.5 text-xs font-bold text-orange-700 bg-orange-50 border border-orange-200 px-3 py-1 rounded-full">
+                    <span>Location: {filters.destination}</span>
+                    <button
+                      onClick={() => handleFilterChange("destination", "Anywhere in Uttarakhand")}
+                      className="hover:text-orange-900 cursor-pointer"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </span>
+                )}
+
+                {filters.styles.map((style) => (
+                  <span
+                    key={style}
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-orange-700 bg-orange-50 border border-orange-200 px-3 py-1 rounded-full"
+                  >
+                    <span>{style}</span>
+                    <button
+                      onClick={() => handleStyleToggle(style)}
+                      className="hover:text-orange-900 cursor-pointer"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </span>
+                ))}
+
+                {filters.duration < 15 && (
+                  <span className="inline-flex items-center gap-1.5 text-xs font-bold text-orange-700 bg-orange-50 border border-orange-200 px-3 py-1 rounded-full">
+                    <span>&le; {filters.duration} Days</span>
+                    <button
+                      onClick={() => handleFilterChange("duration", 15)}
+                      className="hover:text-orange-900 cursor-pointer"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </span>
+                )}
+
+                {filters.maxBudget > 0 && (
+                  <span className="inline-flex items-center gap-1.5 text-xs font-bold text-orange-700 bg-orange-50 border border-orange-200 px-3 py-1 rounded-full">
+                    <span>&le; {formatINR(filters.maxBudget)}</span>
+                    <button
+                      onClick={() => handleFilterChange("maxBudget", 0)}
+                      className="hover:text-orange-900 cursor-pointer"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </span>
+                )}
+
+                <button
+                  onClick={handleResetFilters}
+                  className="text-xs font-bold text-slate-500 hover:text-orange-600 underline ml-2 cursor-pointer"
+                >
+                  Clear all
+                </button>
+              </div>
+            )}
+
+            {/* Tour Cards Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 xl:gap-7">
               {filteredAndSortedTours.length > 0 ? (
                 filteredAndSortedTours.map((tour) => (
-                  <TourCard key={tour.id} tour={tour} />
+                  <TourCard
+                    key={tour.id}
+                    tour={tour}
+                    isLiked={!!wishlist[tour.id]}
+                    onToggleWishlist={handleToggleWishlist}
+                    onQuickView={(t) => setQuickViewTour(t)}
+                  />
                 ))
               ) : (
-                <div className="lg:col-span-3 sm:col-span-2 text-center p-12 bg-yellow-50 rounded-lg border border-yellow-200">
-                  <p className="text-xl font-medium text-yellow-800">
-                    No Uttarakhand tours found matching your criteria.
+                /* Empty State */
+                <div className="sm:col-span-2 xl:col-span-3 text-center p-12 sm:p-16 bg-white rounded-3xl border border-slate-200 shadow-sm space-y-4">
+                  <div className="w-16 h-16 rounded-2xl bg-orange-50 text-orange-600 flex items-center justify-center mx-auto shadow-inner">
+                    <Compass className="w-8 h-8 animate-spin" style={{ animationDuration: "10s" }} />
+                  </div>
+                  <h3 className="text-xl font-bold text-slate-900 font-heading">
+                    No Himalayan Expeditions Match These Filters
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-500 max-w-md mx-auto leading-relaxed">
+                    Try broadening your duration, relaxing the budget limit, or clearing specific styles to see more tours.
                   </p>
-                  <p className="text-sm text-yellow-600 mt-2">
-                    Try adjusting your filters or search terms.
-                  </p>
+                  <button
+                    onClick={handleResetFilters}
+                    className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs uppercase tracking-wider shadow-md transition-all active:scale-95 cursor-pointer"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5" />
+                    <span>Reset All Filters</span>
+                  </button>
                 </div>
               )}
             </div>
           </main>
         </div>
       </div>
+
+      {/* Quick View Modal */}
+      {quickViewTour && (
+        <QuickViewModal
+          tour={quickViewTour}
+          onClose={() => setQuickViewTour(null)}
+          onToggleWishlist={handleToggleWishlist}
+          isLiked={!!wishlist[quickViewTour.id]}
+        />
+      )}
     </div>
   );
 }
