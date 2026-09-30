@@ -1,8 +1,8 @@
 // Backend data for tours
 import kedarnathImg from "../../assets/places/kedarnath.png";
 import govindghatImg from "../../assets/places/Govindghat.jpg";
-import rishikeshImg from "../../assets/places/rishikesh.jpeg";
-import nainitalImg from "../../assets/places/naintal.jpeg";
+import rishikeshImg from "../../assets/places/rishikesh.jpg";
+import nainitalImg from "../../assets/places/nainital.jpg";
 import auliImg from "../../assets/places/auli.webp";
 import almoraImg from "../../assets/places/almora.jpeg";
 import mussoorieImg from "../../assets/places/mussoire.jpg";

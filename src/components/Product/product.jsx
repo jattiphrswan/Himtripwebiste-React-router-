@@ -179,7 +179,10 @@ export default function Products() {
                     src={tour.image}
                     alt={tour.title}
                     className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700 ease-out"
-                    loading="lazy"
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=800&q=80";
+                    }}
                   />
 
                   {/* Gradient Scrim for high contrast */}
@@ -400,6 +403,10 @@ export default function Products() {
                 src={quickViewTour.image}
                 alt={quickViewTour.title}
                 className="w-full h-full object-cover"
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=800&q=80";
+                }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
               <div className="absolute bottom-4 left-6 right-6 text-white">
