@@ -7,9 +7,11 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['"Plus Jakarta Sans"', 'system-ui', '-apple-system', 'sans-serif'],
-        heading: ['"Outfit"', 'sans-serif'],
-        display: ['"Outfit"', 'sans-serif'],
+        serif: ['"Alegreya"', 'Georgia', 'serif'],
+        sans: ['"Alegreya Sans"', '"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+        heading: ['"Alegreya"', 'Georgia', 'serif'],
+        display: ['"Alegreya"', 'Georgia', 'serif'],
+        alegreya: ['"Alegreya"', 'Georgia', 'serif'],
       },
     },
   },
