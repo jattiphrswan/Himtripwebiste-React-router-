@@ -152,8 +152,8 @@ export default function Products() {
           </div>
         </div>
 
-        {/* Tour Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-7">
+        {/* Tour Cards Grid - Wider spacing and comfortable breathing room */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 xl:gap-8">
           {displayTours.map((tour, index) => {
             const isLiked = !!wishlist[tour.id];
             const discountPercent =
@@ -167,11 +167,14 @@ export default function Products() {
             return (
               <div
                 key={tour.id}
-                className="group relative bg-white rounded-2xl overflow-hidden border border-slate-100/90 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.06)] hover:shadow-[0_22px_40px_-12px_rgba(234,88,12,0.18)] hover:-translate-y-1.5 transition-all duration-300 flex flex-col h-full"
+                className="group relative bg-white rounded-3xl overflow-hidden border border-slate-200/90 shadow-[0_6px_25px_-6px_rgba(0,0,0,0.07)] hover:shadow-[0_24px_50px_-10px_rgba(234,88,12,0.22)] hover:-translate-y-2 transition-all duration-300 flex flex-col h-full"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
-                {/* Image Section */}
-                <div className="relative h-52 sm:h-56 w-full overflow-hidden bg-slate-100">
+                {/* Wild Top Accent Bar */}
+                <div className="h-1.5 w-full bg-gradient-to-r from-orange-500 via-amber-500 to-emerald-500" />
+
+                {/* Image Section - Widescreen Panoramic proportion */}
+                <div className="relative h-60 sm:h-64 w-full overflow-hidden bg-slate-100">
                   <img
                     src={tour.image}
                     alt={tour.title}
@@ -179,31 +182,31 @@ export default function Products() {
                     loading="lazy"
                   />
 
-                  {/* Gradient Scrim */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-black/35 pointer-events-none" />
+                  {/* Gradient Scrim for high contrast */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-black/40 pointer-events-none" />
 
                   {/* Top Left Badges */}
-                  <div className="absolute top-3 left-3 flex flex-col gap-1.5 items-start z-10">
+                  <div className="absolute top-3.5 left-3.5 flex flex-col gap-2 items-start z-10">
                     {/* Category Tag */}
-                    <span className="bg-black/50 backdrop-blur-md text-white text-[11px] font-semibold px-2.5 py-1 rounded-full border border-white/20 tracking-wide uppercase">
+                    <span className="bg-black/60 backdrop-blur-md text-white text-[11px] font-bold px-3 py-1 rounded-full border border-white/20 tracking-wider uppercase shadow-sm">
                       {tour.category || tour.style}
                     </span>
 
                     {/* Sale / Discount Badge */}
                     {tour.onSale && (
-                      <span className="inline-flex items-center gap-1 bg-gradient-to-r from-amber-500 to-rose-500 text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-md">
-                        <Tag className="w-3 h-3" />
+                      <span className="inline-flex items-center gap-1 bg-gradient-to-r from-amber-500 to-rose-500 text-white text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md">
+                        <Tag className="w-3.5 h-3.5" />
                         {discountPercent ? `${discountPercent}% OFF` : "ON SALE"}
                       </span>
                     )}
                   </div>
 
                   {/* Top Right Wishlist & Quick View */}
-                  <div className="absolute top-3 right-3 flex items-center gap-1.5 z-10">
+                  <div className="absolute top-3.5 right-3.5 flex items-center gap-2 z-10">
                     <button
                       onClick={() => setQuickViewTour(tour)}
                       title="Quick View"
-                      className="w-8 h-8 rounded-full bg-black/45 backdrop-blur-md text-white/90 hover:text-white hover:bg-black/70 flex items-center justify-center border border-white/20 transition-all opacity-0 group-hover:opacity-100 cursor-pointer shadow-xs"
+                      className="w-9 h-9 rounded-full bg-black/50 backdrop-blur-md text-white hover:bg-black/80 flex items-center justify-center border border-white/20 transition-all opacity-0 group-hover:opacity-100 cursor-pointer shadow-md"
                     >
                       <Eye className="w-4 h-4" />
                     </button>
@@ -211,7 +214,7 @@ export default function Products() {
                     <button
                       onClick={(e) => toggleWishlist(e, tour.id)}
                       title={isLiked ? "Saved to favorites" : "Save to favorites"}
-                      className="w-8 h-8 rounded-full bg-white/90 backdrop-blur-md text-slate-700 hover:text-rose-500 flex items-center justify-center shadow-md transition-all active:scale-90 cursor-pointer"
+                      className="w-9 h-9 rounded-full bg-white/95 backdrop-blur-md text-slate-700 hover:text-rose-500 flex items-center justify-center shadow-lg transition-all active:scale-90 cursor-pointer"
                     >
                       <Heart
                         className={`w-4 h-4 transition-colors ${
@@ -224,29 +227,31 @@ export default function Products() {
                   </div>
 
                   {/* Bottom Over-Image Info */}
-                  <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white text-xs font-medium z-10">
+                  <div className="absolute bottom-3.5 left-3.5 right-3.5 flex items-center justify-between text-white text-xs font-semibold z-10">
                     {/* Duration */}
-                    <div className="inline-flex items-center gap-1.5 bg-black/40 backdrop-blur-md px-2.5 py-1 rounded-lg border border-white/15">
+                    <div className="inline-flex items-center gap-1.5 bg-black/50 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/20">
                       <Clock className="w-3.5 h-3.5 text-amber-300" />
-                      <span>{tour.duration} Days</span>
+                      <span>{tour.duration} Days Expedition</span>
                     </div>
 
                     {/* Rating */}
-                    <div className="inline-flex items-center gap-1 bg-black/40 backdrop-blur-md px-2.5 py-1 rounded-lg border border-white/15">
+                    <div className="inline-flex items-center gap-1.5 bg-black/50 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/20">
                       <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
-                      <span className="font-bold text-white">{tour.rating}</span>
-                      <span className="text-white/70 text-[10px]">({tour.reviews})</span>
+                      <span className="font-extrabold text-white">{tour.rating}</span>
+                      <span className="text-white/80 text-[11px]">({tour.reviews})</span>
                     </div>
                   </div>
                 </div>
 
-                {/* Card Content */}
-                <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between">
+                {/* Card Content - Wider with generous padding */}
+                <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between">
                   <div>
                     {/* Destination */}
-                    <div className="flex items-center gap-1.5 text-xs font-semibold text-orange-600 mb-1.5 uppercase tracking-wide">
-                      <MapPin className="w-3.5 h-3.5 shrink-0 text-orange-500" />
-                      <span className="truncate">{tour.destination}</span>
+                    <div className="flex items-center gap-1.5 text-xs font-bold text-orange-600 mb-2 uppercase tracking-wide">
+                      <MapPin className="w-4 h-4 shrink-0 text-orange-500" />
+                      <span className="truncate" title={tour.destination}>
+                        {tour.destination}
+                      </span>
                     </div>
 
                     {/* Title */}
@@ -254,19 +259,19 @@ export default function Products() {
                       to={`/booking/${tour.id}`}
                       className="block group-hover:text-orange-600 transition-colors"
                     >
-                      <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-snug line-clamp-2 font-heading mb-2.5">
+                      <h3 className="text-lg sm:text-xl font-bold text-slate-900 leading-snug line-clamp-2 font-heading mb-3">
                         {tour.title}
                       </h3>
                     </Link>
 
                     {/* Feature Pills */}
-                    <div className="flex flex-wrap gap-1.5 mb-4">
+                    <div className="flex flex-wrap gap-2 mb-5">
                       {highlights.slice(0, 2).map((item, idx) => (
                         <span
                           key={idx}
-                          className="inline-flex items-center gap-1 text-[11px] font-medium text-slate-600 bg-slate-100/90 px-2 py-0.5 rounded-md"
+                          className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-slate-700 bg-slate-100/90 px-2.5 py-1 rounded-lg border border-slate-200/50"
                         >
-                          <CheckCircle className="w-2.5 h-2.5 text-emerald-600" />
+                          <CheckCircle className="w-3 h-3 text-emerald-600 shrink-0" />
                           <span>{item}</span>
                         </span>
                       ))}
@@ -274,32 +279,32 @@ export default function Products() {
                   </div>
 
                   {/* Price & CTA Section */}
-                  <div className="pt-3 border-t border-slate-100 mt-auto">
-                    <div className="flex items-end justify-between mb-3">
+                  <div className="pt-4 border-t border-slate-100 mt-auto">
+                    <div className="flex items-end justify-between mb-3.5">
                       <div>
-                        <span className="block text-[11px] font-medium text-slate-400 uppercase tracking-wider">
+                        <span className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
                           Starting From
                         </span>
-                        <div className="flex items-baseline gap-1.5">
-                          <span className="text-xl sm:text-2xl font-black text-slate-900 font-heading">
+                        <div className="flex items-baseline gap-2">
+                          <span className="text-2xl sm:text-3xl font-black text-slate-900 font-heading">
                             {formatINR(tour.price)}
                           </span>
                           {tour.originalPrice && (
-                            <span className="text-xs text-slate-400 line-through">
+                            <span className="text-xs text-slate-400 line-through font-medium">
                               {formatINR(tour.originalPrice)}
                             </span>
                           )}
                         </div>
                       </div>
-                      <span className="text-[11px] text-slate-500 font-medium pb-1">
+                      <span className="text-xs text-slate-500 font-medium pb-1">
                         / person
                       </span>
                     </div>
 
-                    {/* Action Button */}
+                    {/* Action Button - Wider & bolder */}
                     <Link
                       to={`/booking/${tour.id}`}
-                      className="group/btn relative w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-white bg-gradient-to-r from-orange-600 via-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 shadow-md shadow-orange-600/20 hover:shadow-orange-600/35 transition-all duration-200 active:scale-[0.98]"
+                      className="group/btn relative w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-bold text-sm text-white bg-gradient-to-r from-orange-600 via-orange-500 to-amber-500 hover:from-orange-700 hover:to-amber-600 shadow-md shadow-orange-500/25 hover:shadow-orange-500/40 transition-all duration-200 active:scale-[0.98]"
                     >
                       <span>Book Now</span>
                       <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />

@@ -35,7 +35,7 @@ export default function Home() {
       </div>
 
       {/* Products, Collections, Adventure Preview */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
+      <section className="max-w-[1440px] 2xl:max-w-[1520px] mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
         <div className="animate-fadeUp" style={{ animationDelay: "0.2s" }}>
           <Products />
         </div>
@@ -48,7 +48,7 @@ export default function Home() {
       </section>
 
       {/* Why Choose HimTrip */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fadeUp" style={{ animationDelay: "0.8s" }}>
+      <section className="max-w-[1440px] 2xl:max-w-[1520px] mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fadeUp" style={{ animationDelay: "0.8s" }}>
         <WhyChooseHimTrip />
       </section>
 
