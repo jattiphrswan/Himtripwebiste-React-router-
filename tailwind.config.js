@@ -7,11 +7,11 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        serif: ['"Alegreya"', 'Georgia', 'serif'],
-        sans: ['"Alegreya Sans"', '"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
-        heading: ['"Alegreya"', 'Georgia', 'serif'],
-        display: ['"Alegreya"', 'Georgia', 'serif'],
-        alegreya: ['"Alegreya"', 'Georgia', 'serif'],
+        sans: ['"Mulish"', '"Muli"', 'system-ui', '-apple-system', 'sans-serif'],
+        heading: ['"Mulish"', '"Muli"', 'sans-serif'],
+        display: ['"Mulish"', '"Muli"', 'sans-serif'],
+        muli: ['"Mulish"', '"Muli"', 'sans-serif'],
+        mulish: ['"Mulish"', '"Muli"', 'sans-serif'],
       },
     },
   },
