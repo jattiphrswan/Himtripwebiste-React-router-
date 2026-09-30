@@ -51,7 +51,7 @@ const getTourHighlights = (tour) => {
   return ["Private Mountain Cab", "Lakeview / Valley Stay", "Family Friendly"];
 };
 
-// --- Upgraded Wild Tour Card Component ---
+// --- Upgraded Wild & Compact Tour Card Component ---
 const TourCard = ({ tour, isLiked, onToggleWishlist, onQuickView }) => {
   const discountPercent =
     tour.originalPrice && tour.originalPrice > tour.price
@@ -61,12 +61,12 @@ const TourCard = ({ tour, isLiked, onToggleWishlist, onQuickView }) => {
   const highlights = getTourHighlights(tour);
 
   return (
-    <div className="group relative bg-white rounded-3xl overflow-hidden border border-slate-200/90 shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:shadow-[0_24px_50px_-10px_rgba(234,88,12,0.24)] hover:-translate-y-2 transition-all duration-300 flex flex-col h-full">
-      {/* Wild Top Accent Gradient Bar */}
-      <div className="h-2 w-full bg-gradient-to-r from-orange-500 via-amber-500 to-emerald-500" />
+    <div className="group relative bg-white rounded-3xl overflow-hidden border border-slate-200/90 shadow-[0_6px_25px_-6px_rgba(0,0,0,0.06)] hover:shadow-[0_20px_45px_-10px_rgba(234,88,12,0.22)] hover:-translate-y-1.5 transition-all duration-300 flex flex-col h-full">
+      {/* Top Accent Gradient Line */}
+      <div className="h-1.5 w-full bg-gradient-to-r from-orange-500 via-amber-500 to-emerald-500" />
 
-      {/* Image Container with Panoramic Proportion */}
-      <div className="relative h-64 sm:h-72 w-full overflow-hidden bg-slate-100">
+      {/* Image Container with Balanced Panoramic Height */}
+      <div className="relative h-48 sm:h-52 w-full overflow-hidden bg-slate-100 shrink-0">
         <img
           src={tour.image}
           alt={tour.title}
@@ -79,84 +79,84 @@ const TourCard = ({ tour, isLiked, onToggleWishlist, onQuickView }) => {
         />
 
         {/* Gradient Scrim */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/40 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-black/35 pointer-events-none" />
 
         {/* Top Left Badges */}
-        <div className="absolute top-4 left-4 flex flex-col gap-2 items-start z-10">
-          <span className="bg-black/60 backdrop-blur-md text-white text-xs font-bold px-3.5 py-1.5 rounded-full border border-white/20 tracking-wider uppercase shadow-md">
+        <div className="absolute top-3 left-3 flex flex-col gap-1.5 items-start z-10">
+          <span className="bg-black/60 backdrop-blur-md text-white text-[11px] font-bold px-3 py-1 rounded-full border border-white/20 tracking-wider uppercase shadow-xs">
             {tour.category || tour.style}
           </span>
 
           {tour.onSale && (
-            <span className="inline-flex items-center gap-1.5 bg-gradient-to-r from-amber-500 to-rose-500 text-white text-xs font-extrabold px-3 py-1.5 rounded-full shadow-lg">
-              <Tag className="w-3.5 h-3.5" />
-              <span>{discountPercent ? `${discountPercent}% OFF` : "SPECIAL OFFER"}</span>
+            <span className="inline-flex items-center gap-1 bg-gradient-to-r from-amber-500 to-rose-500 text-white text-[11px] font-extrabold px-2.5 py-0.5 rounded-full shadow-md">
+              <Tag className="w-3 h-3" />
+              <span>{discountPercent ? `${discountPercent}% OFF` : "OFFER"}</span>
             </span>
           )}
         </div>
 
-        {/* Top Right Actions: Quick View & Wishlist */}
-        <div className="absolute top-4 right-4 flex items-center gap-2 z-10">
+        {/* Top Right Actions */}
+        <div className="absolute top-3 right-3 flex items-center gap-1.5 z-10">
           <button
             onClick={() => onQuickView(tour)}
             title="Quick View"
-            className="w-10 h-10 rounded-full bg-black/60 backdrop-blur-md text-white hover:bg-black/90 flex items-center justify-center border border-white/20 transition-all opacity-0 group-hover:opacity-100 cursor-pointer shadow-lg"
+            className="w-8 h-8 rounded-full bg-black/50 backdrop-blur-md text-white hover:bg-black/80 flex items-center justify-center border border-white/20 transition-all opacity-0 group-hover:opacity-100 cursor-pointer shadow-md"
           >
-            <Eye className="w-4 h-4" />
+            <Eye className="w-3.5 h-3.5" />
           </button>
 
           <button
             onClick={(e) => onToggleWishlist(e, tour.id)}
             title={isLiked ? "Saved to favorites" : "Save to favorites"}
-            className="w-10 h-10 rounded-full bg-white/95 backdrop-blur-md text-slate-700 hover:text-rose-500 flex items-center justify-center shadow-xl transition-all active:scale-90 cursor-pointer"
+            className="w-8 h-8 rounded-full bg-white/95 backdrop-blur-md text-slate-700 hover:text-rose-500 flex items-center justify-center shadow-md transition-all active:scale-90 cursor-pointer"
           >
             <Heart
-              className={`w-5 h-5 transition-colors ${
+              className={`w-4 h-4 transition-colors ${
                 isLiked ? "fill-rose-500 text-rose-500" : "text-slate-700"
               }`}
             />
           </button>
         </div>
 
-        {/* Bottom Image Stats: Duration & Rating Pill */}
-        <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-white text-xs font-semibold z-10">
-          <div className="inline-flex items-center gap-2 bg-black/60 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/20 shadow-md">
-            <Clock className="w-4 h-4 text-amber-300" />
-            <span className="font-bold">{tour.duration} Days / {tour.duration - 1 || 1} Nights</span>
+        {/* Bottom Image Info Strip */}
+        <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-white text-xs font-semibold z-10">
+          <div className="inline-flex items-center gap-1.5 bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/20 shadow-xs">
+            <Clock className="w-3.5 h-3.5 text-amber-300" />
+            <span className="text-[11px]">{tour.duration}D / {tour.duration - 1 || 1}N</span>
           </div>
 
-          <div className="inline-flex items-center gap-1.5 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/20 text-amber-300 font-bold shadow-md">
-            <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-            <span className="text-sm font-extrabold text-white">{tour.rating}</span>
-            <span className="text-[11px] text-slate-300 font-normal">
+          <div className="inline-flex items-center gap-1 bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/20 text-amber-300 font-bold shadow-xs">
+            <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+            <span className="text-xs font-bold text-white">{tour.rating}</span>
+            <span className="text-[10px] text-slate-300 font-normal">
               ({tour.reviews})
             </span>
           </div>
         </div>
       </div>
 
-      {/* Card Content Section - Generous and Spacious */}
-      <div className="p-6 sm:p-7 flex-1 flex flex-col justify-between">
+      {/* Card Content Section - Compact & Balanced */}
+      <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between">
         <div>
           {/* Destination */}
-          <div className="flex items-center gap-2 text-xs font-bold text-orange-600 mb-2 uppercase tracking-wide">
-            <MapPin className="w-4 h-4 shrink-0 text-orange-500" />
+          <div className="flex items-center gap-1.5 text-xs font-bold text-orange-600 mb-1.5 uppercase tracking-wide">
+            <MapPin className="w-3.5 h-3.5 shrink-0 text-orange-500" />
             <span className="truncate">{tour.destination}</span>
           </div>
 
           {/* Title */}
-          <h3 className="text-xl sm:text-2xl font-bold text-slate-900 leading-snug line-clamp-2 font-heading mb-3.5 group-hover:text-orange-600 transition-colors">
+          <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-snug line-clamp-1 font-heading mb-2 group-hover:text-orange-600 transition-colors">
             {tour.title}
           </h3>
 
           {/* Feature Highlights Pills */}
-          <div className="flex flex-wrap gap-2 mb-6">
+          <div className="flex flex-wrap gap-1.5 mb-3.5">
             {highlights.map((item, idx) => (
               <span
                 key={idx}
-                className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 bg-slate-100/90 px-3 py-1.5 rounded-xl border border-slate-200/60"
+                className="inline-flex items-center gap-1 text-[11px] font-medium text-slate-700 bg-slate-100/90 px-2.5 py-0.5 rounded-lg border border-slate-200/50"
               >
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                <CheckCircle2 className="w-3 h-3 text-emerald-600 shrink-0" />
                 <span className="truncate">{item}</span>
               </span>
             ))}
@@ -164,50 +164,50 @@ const TourCard = ({ tour, isLiked, onToggleWishlist, onQuickView }) => {
         </div>
 
         {/* Pricing & CTA Section */}
-        <div className="pt-5 border-t border-slate-100 mt-auto">
-          <div className="flex items-end justify-between mb-5">
+        <div className="pt-3 border-t border-slate-100 mt-auto">
+          <div className="flex items-end justify-between mb-3">
             <div>
-              <span className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">
+              <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">
                 Starting From
               </span>
-              <div className="flex items-baseline gap-2.5">
-                <span className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight font-heading">
+              <div className="flex items-baseline gap-2">
+                <span className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight font-heading">
                   {formatINR(tour.price)}
                 </span>
                 {tour.originalPrice && tour.originalPrice > tour.price && (
-                  <span className="text-sm text-slate-400 line-through">
+                  <span className="text-xs text-slate-400 line-through">
                     {formatINR(tour.originalPrice)}
                   </span>
                 )}
               </div>
-              <span className="block text-xs text-emerald-700 font-semibold mt-1">
-                All Taxes, Permits & Transfers Included
+              <span className="block text-[10px] text-emerald-700 font-semibold mt-0.5">
+                All Taxes & Permits Included
               </span>
             </div>
 
             <div className="text-right">
-              <span className="inline-block text-xs font-bold text-orange-700 bg-orange-50 border border-orange-200/80 px-3 py-1 rounded-xl">
+              <span className="inline-block text-[11px] font-bold text-orange-700 bg-orange-50 border border-orange-200/80 px-2 py-0.5 rounded-lg">
                 {tour.style}
               </span>
             </div>
           </div>
 
           {/* Dual Action Buttons */}
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-2">
             <button
               onClick={() => onQuickView(tour)}
-              className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-bold text-xs sm:text-sm text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors cursor-pointer"
+              className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl font-bold text-xs text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors cursor-pointer"
             >
-              <Eye className="w-4 h-4 text-slate-600" />
+              <Eye className="w-3.5 h-3.5 text-slate-600" />
               <span>Quick View</span>
             </button>
 
             <Link
               to={`/booking/${tour.id}`}
-              className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-bold text-xs sm:text-sm text-white bg-gradient-to-r from-orange-600 via-orange-500 to-amber-500 hover:from-orange-700 hover:to-amber-600 shadow-md shadow-orange-500/25 transition-all duration-200 active:scale-95"
+              className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl font-bold text-xs text-white bg-gradient-to-r from-orange-600 via-orange-500 to-amber-500 hover:from-orange-700 hover:to-amber-600 shadow-md shadow-orange-500/25 transition-all duration-200 active:scale-95"
             >
               <span>Book Now</span>
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
         </div>
