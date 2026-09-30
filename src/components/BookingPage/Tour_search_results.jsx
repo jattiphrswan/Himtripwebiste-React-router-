@@ -171,7 +171,7 @@ const TourCard = ({ tour, isLiked, onToggleWishlist, onQuickView }) => {
                 Starting From
               </span>
               <div className="flex items-baseline gap-2">
-                <span className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight font-heading">
+                <span className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight font-heading">
                   {formatINR(tour.price)}
                 </span>
                 {tour.originalPrice && tour.originalPrice > tour.price && (
@@ -198,16 +198,16 @@ const TourCard = ({ tour, isLiked, onToggleWishlist, onQuickView }) => {
               onClick={() => onQuickView(tour)}
               className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl font-bold text-xs text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors cursor-pointer"
             >
-              <Eye className="w-3.5 h-3.5 text-slate-600" />
-              <span>Quick View</span>
+              <Eye className="w-3.5 h-3.5 text-slate-600 shrink-0" />
+              <span className="truncate">Quick View</span>
             </button>
 
             <Link
               to={`/booking/${tour.id}`}
               className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl font-bold text-xs text-white bg-gradient-to-r from-orange-600 via-orange-500 to-amber-500 hover:from-orange-700 hover:to-amber-600 shadow-md shadow-orange-500/25 transition-all duration-200 active:scale-95"
             >
-              <span>Book Now</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <span className="truncate">Book Now</span>
+              <ArrowRight className="w-3.5 h-3.5 shrink-0" />
             </Link>
           </div>
         </div>
@@ -576,9 +576,9 @@ export default function TourSearchResults() {
         </div>
       </div>
 
-      {/* 2. Main Container: Sidebar + Tours Grid */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      {/* 2. Main Container: Sidebar + Tours Grid - Full Page Container Width */}
+      <div className="w-full max-w-[1680px] 2xl:max-w-[1880px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 pt-8">
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 items-start w-full">
           {/* Mobile Filter Toggle Drawer Overlay */}
           {showFilters && (
             <div
@@ -587,9 +587,9 @@ export default function TourSearchResults() {
             />
           )}
 
-          {/* Left Sidebar Filter Panel (4 cols on lg) */}
+          {/* Left Sidebar Filter Panel (Compact & Sticky on Desktop) */}
           <aside
-            className={`fixed inset-y-0 left-0 z-50 w-80 max-w-full bg-white p-6 shadow-2xl transition-transform duration-300 overflow-y-auto lg:static lg:z-10 lg:w-auto lg:p-6 lg:rounded-3xl lg:border lg:border-slate-200/90 lg:shadow-[0_8px_30px_rgb(0,0,0,0.04)] lg:col-span-4 xl:col-span-3 ${
+            className={`fixed inset-y-0 left-0 z-50 w-80 max-w-full bg-white p-6 shadow-2xl transition-transform duration-300 overflow-y-auto lg:static lg:z-10 lg:w-72 xl:w-76 2xl:w-80 shrink-0 lg:p-6 lg:rounded-3xl lg:border lg:border-slate-200/90 lg:shadow-[0_8px_30px_rgb(0,0,0,0.04)] lg:sticky lg:top-24 ${
               showFilters ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
             }`}
           >
@@ -772,8 +772,8 @@ export default function TourSearchResults() {
             </div>
           </aside>
 
-          {/* Main Tours Grid & Top Bar (8 cols on lg, 9 on xl) */}
-          <main className="lg:col-span-8 xl:col-span-9 space-y-6">
+          {/* Main Tours Grid & Top Bar */}
+          <main className="flex-1 min-w-0 w-full space-y-6">
             {/* Top Control Bar: Mobile trigger, result count & sort */}
             <div className="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
               {/* Mobile Filter Button */}
@@ -793,7 +793,7 @@ export default function TourSearchResults() {
 
               {/* View Layout Toggle & Sort */}
               <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto justify-end">
-                {/* Wide Cards vs Compact Toggle */}
+                {/* 4 Cards vs 3 Cards View Toggle */}
                 <div className="hidden sm:inline-flex items-center p-1 bg-slate-100 rounded-xl border border-slate-200 text-xs font-semibold">
                   <button
                     onClick={() => setViewMode("wide")}
@@ -803,7 +803,7 @@ export default function TourSearchResults() {
                         : "text-slate-600 hover:text-slate-900"
                     }`}
                   >
-                    Wild Wide (2 Col)
+                    Wild Wide (4 Col)
                   </button>
                   <button
                     onClick={() => setViewMode("compact")}
@@ -813,7 +813,7 @@ export default function TourSearchResults() {
                         : "text-slate-600 hover:text-slate-900"
                     }`}
                   >
-                    Compact (3 Col)
+                    Panoramic (3 Col)
                   </button>
                 </div>
 
@@ -907,12 +907,12 @@ export default function TourSearchResults() {
               </div>
             )}
 
-            {/* Tour Cards Grid - Default Wide 2-Column Luxury Cards */}
+            {/* Tour Cards Grid - 4 Columns on Widescreen, 3 Columns on Standard */}
             <div
-              className={`grid gap-6 lg:gap-8 ${
+              className={`grid gap-6 ${
                 viewMode === "wide"
-                  ? "grid-cols-1 md:grid-cols-2"
-                  : "grid-cols-1 sm:grid-cols-2 xl:grid-cols-3"
+                  ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 min-[1400px]:grid-cols-4 2xl:grid-cols-4"
+                  : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3"
               }`}
             >
               {filteredAndSortedTours.length > 0 ? (
@@ -927,7 +927,7 @@ export default function TourSearchResults() {
                 ))
               ) : (
                 /* Empty State */
-                <div className="sm:col-span-2 xl:col-span-3 text-center p-12 sm:p-16 bg-white rounded-3xl border border-slate-200 shadow-sm space-y-4">
+                <div className="col-span-full text-center p-12 sm:p-16 bg-white rounded-3xl border border-slate-200 shadow-sm space-y-4">
                   <div className="w-16 h-16 rounded-2xl bg-orange-50 text-orange-600 flex items-center justify-center mx-auto shadow-inner">
                     <Compass className="w-8 h-8 animate-spin" style={{ animationDuration: "10s" }} />
                   </div>
