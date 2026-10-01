@@ -200,8 +200,8 @@ export default function ExploreUttarakhand() {
                   onClick={() => setActiveVibe(vibe.id)}
                   className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer ${
                     isActive
-                      ? "bg-sky-50 border-2 border-sky-600 text-sky-800 shadow-xs"
-                      : "bg-white border border-slate-200 text-slate-700 hover:border-slate-300 hover:bg-slate-50"
+                      ? "bg-orange-50 border-2 border-orange-600 text-orange-800 shadow-xs"
+                      : "bg-white border border-slate-200 text-slate-700 hover:border-orange-200 hover:bg-orange-50/50"
                   }`}
                 >
                   <span>{vibe.emoji}</span>
@@ -258,7 +258,7 @@ export default function ExploreUttarakhand() {
             <button
               onClick={() => scrollContainer(vibeScrollRef, "right")}
               aria-label="Scroll next"
-              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 w-10 h-10 rounded-full bg-white border border-slate-200 text-slate-700 shadow-lg flex items-center justify-center hover:bg-sky-50 hover:text-sky-600 transition-all opacity-0 group-hover:opacity-100 z-10 hidden sm:flex cursor-pointer"
+              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 w-10 h-10 rounded-full bg-white border border-slate-200 text-slate-700 shadow-lg flex items-center justify-center hover:bg-orange-50 hover:text-orange-600 transition-all opacity-0 group-hover:opacity-100 z-10 hidden sm:flex cursor-pointer"
             >
               <ChevronRight className="w-5 h-5" />
             </button>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   Compass,
   Mountain,
@@ -12,11 +12,8 @@ import {
   Eye,
   X,
   Search,
-  SlidersHorizontal,
-  Flame,
   Sparkles,
   Phone,
-  HelpCircle,
 } from "lucide-react";
 import { UTTARAKHAND_TRACKS } from "../Backend/BackenData";
 import bannerImg from "../../assets/places/banner.webp";
@@ -53,8 +50,8 @@ export default function TracksPage() {
         <div className="absolute inset-0 bg-slate-950/65 backdrop-blur-[0.5px]" />
 
         <div className="relative z-10 max-w-4xl mx-auto text-white">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/25 border border-emerald-400/40 text-emerald-200 text-xs sm:text-sm font-semibold mb-4 shadow-sm">
-            <Compass className="w-4 h-4 text-emerald-300" />
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-orange-500/25 border border-orange-400/40 text-orange-200 text-xs sm:text-sm font-semibold mb-4 shadow-sm">
+            <Compass className="w-4 h-4 text-orange-300" />
             <span>Devbhoomi High Trails & Expeditions</span>
           </div>
 
@@ -73,7 +70,7 @@ export default function TracksPage() {
         {/* Quick Highlights Counter Bar */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-5 sm:p-6 bg-white rounded-3xl border border-slate-200 shadow-sm">
           <div className="text-center p-2">
-            <span className="text-2xl sm:text-3xl font-black text-emerald-600 font-heading">
+            <span className="text-2xl sm:text-3xl font-black text-orange-600 font-heading">
               15,500 ft
             </span>
             <p className="text-xs sm:text-sm text-slate-500 font-medium mt-1">
@@ -81,7 +78,7 @@ export default function TracksPage() {
             </p>
           </div>
           <div className="text-center p-2 border-l border-slate-100">
-            <span className="text-2xl sm:text-3xl font-black text-teal-600 font-heading">
+            <span className="text-2xl sm:text-3xl font-black text-amber-600 font-heading">
               100% NIM
             </span>
             <p className="text-xs sm:text-sm text-slate-500 font-medium mt-1">
@@ -89,7 +86,7 @@ export default function TracksPage() {
             </p>
           </div>
           <div className="text-center p-2 border-l-0 md:border-l border-slate-100">
-            <span className="text-2xl sm:text-3xl font-black text-amber-600 font-heading">
+            <span className="text-2xl sm:text-3xl font-black text-orange-500 font-heading">
               4-Season
             </span>
             <p className="text-xs sm:text-sm text-slate-500 font-medium mt-1">
@@ -97,7 +94,7 @@ export default function TracksPage() {
             </p>
           </div>
           <div className="text-center p-2 border-l border-slate-100">
-            <span className="text-2xl sm:text-3xl font-black text-sky-600 font-heading">
+            <span className="text-2xl sm:text-3xl font-black text-amber-500 font-heading">
               Zero
             </span>
             <p className="text-xs sm:text-sm text-slate-500 font-medium mt-1">
@@ -116,7 +113,7 @@ export default function TracksPage() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by track name, region, or peak..."
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500"
+              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/30 focus:border-orange-500"
             />
           </div>
 
@@ -133,7 +130,7 @@ export default function TracksPage() {
                 onClick={() => setSelectedDifficulty(diff.id)}
                 className={`px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
                   selectedDifficulty === diff.id
-                    ? "bg-emerald-600 text-white shadow-xs"
+                    ? "bg-gradient-to-r from-orange-600 to-amber-600 text-white shadow-xs"
                     : "bg-slate-100 text-slate-700 hover:bg-slate-200"
                 }`}
               >
@@ -159,7 +156,7 @@ export default function TracksPage() {
                 className="group relative bg-white rounded-3xl overflow-hidden border border-slate-200/90 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col h-full"
               >
                 {/* Top Accent Gradient Bar */}
-                <div className="h-1.5 w-full bg-gradient-to-r from-emerald-500 via-teal-500 to-amber-500" />
+                <div className="h-1.5 w-full bg-gradient-to-r from-orange-500 via-amber-500 to-orange-600" />
 
                 {/* Track Photo */}
                 <div className="relative h-60 w-full overflow-hidden bg-slate-100 shrink-0">
@@ -186,12 +183,12 @@ export default function TracksPage() {
                   {/* Bottom Stats */}
                   <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white text-xs font-semibold z-10">
                     <div className="inline-flex items-center gap-1.5 bg-black/55 backdrop-blur-md px-2.5 py-1 rounded-xl border border-white/20">
-                      <Mountain className="w-3.5 h-3.5 text-emerald-400" />
+                      <Mountain className="w-3.5 h-3.5 text-amber-400" />
                       <span>{track.altitudeFt}</span>
                     </div>
 
                     <div className="inline-flex items-center gap-1.5 bg-black/55 backdrop-blur-md px-2.5 py-1 rounded-xl border border-white/20">
-                      <Compass className="w-3.5 h-3.5 text-amber-400" />
+                      <Compass className="w-3.5 h-3.5 text-orange-400" />
                       <span>{track.difficulty}</span>
                     </div>
                   </div>
@@ -202,7 +199,7 @@ export default function TracksPage() {
                   <div>
                     <div className="flex items-center justify-between text-xs text-slate-500 mb-2">
                       <div className="flex items-center gap-1 text-slate-600 font-medium">
-                        <MapPin className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                        <MapPin className="w-3.5 h-3.5 text-orange-600 shrink-0" />
                         <span className="truncate">{track.region}</span>
                       </div>
                       <div className="flex items-center gap-1 font-bold text-slate-800">
@@ -214,7 +211,7 @@ export default function TracksPage() {
                       </div>
                     </div>
 
-                    <h3 className="text-lg font-bold text-slate-900 group-hover:text-emerald-700 transition-colors line-clamp-1">
+                    <h3 className="text-lg font-bold text-slate-900 group-hover:text-orange-600 transition-colors line-clamp-1">
                       {track.title}
                     </h3>
 
@@ -226,7 +223,7 @@ export default function TracksPage() {
                       {track.tags?.slice(0, 3).map((tag, idx) => (
                         <span
                           key={idx}
-                          className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 text-[11px] font-medium"
+                          className="px-2 py-0.5 rounded-md bg-orange-50/70 border border-orange-200/50 text-orange-800 text-[11px] font-medium"
                         >
                           {tag}
                         </span>
@@ -253,7 +250,7 @@ export default function TracksPage() {
                       </div>
 
                       {discountPercent && (
-                        <span className="px-2 py-1 rounded-lg bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200">
+                        <span className="px-2 py-1 rounded-lg bg-orange-50 text-orange-700 text-xs font-bold border border-orange-200">
                           {discountPercent}% OFF
                         </span>
                       )}
@@ -262,14 +259,14 @@ export default function TracksPage() {
                     <div className="grid grid-cols-2 gap-2">
                       <button
                         onClick={() => setSelectedTrack(track)}
-                        className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl border border-slate-200 hover:border-emerald-300 hover:bg-emerald-50 text-slate-700 hover:text-emerald-700 font-semibold text-xs transition-colors cursor-pointer"
+                        className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl border border-slate-200 hover:border-orange-300 hover:bg-orange-50 text-slate-700 hover:text-orange-700 font-semibold text-xs transition-colors cursor-pointer"
                       >
                         <Eye className="w-3.5 h-3.5" />
                         <span>Trail Details</span>
                       </button>
                       <button
                         onClick={() => navigate(`/booking/${track.id}`)}
-                        className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-xs shadow-sm shadow-emerald-600/30 transition-all active:scale-95 cursor-pointer"
+                        className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-gradient-to-r from-orange-600 via-orange-500 to-amber-500 hover:from-orange-700 hover:to-amber-600 text-white font-bold text-xs shadow-sm shadow-orange-500/25 transition-all active:scale-95 cursor-pointer"
                       >
                         <span>Book Track</span>
                         <ArrowRight className="w-3.5 h-3.5" />
@@ -282,10 +279,10 @@ export default function TracksPage() {
           })}
         </div>
 
-        {/* Essential Himalayan Trekking Safety Guide */}
-        <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-950 text-white rounded-3xl p-6 sm:p-10 shadow-xl">
+        {/* Himalayan Trekking Safety Guide */}
+        <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-orange-950 text-white rounded-3xl p-6 sm:p-10 shadow-xl">
           <div className="max-w-3xl">
-            <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold uppercase tracking-wider border border-emerald-400/30">
+            <span className="px-3 py-1 rounded-full bg-orange-500/20 text-orange-300 text-xs font-bold uppercase tracking-wider border border-orange-400/30">
               Safety & Mountain Etiquette
             </span>
             <h3 className="text-2xl sm:text-3xl font-bold font-heading mt-3">
@@ -297,14 +294,14 @@ export default function TracksPage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
               <div className="p-4 rounded-2xl bg-white/5 border border-white/10">
-                <ShieldCheck className="w-5 h-5 text-emerald-400 mb-2" />
+                <ShieldCheck className="w-5 h-5 text-orange-400 mb-2" />
                 <h4 className="font-bold text-sm text-white">Medical Monitoring Twice Daily</h4>
                 <p className="text-xs text-slate-300 mt-1">
                   Routine SpO2 pulse-oximeter checkups and mountain sickness monitoring every morning and evening.
                 </p>
               </div>
               <div className="p-4 rounded-2xl bg-white/5 border border-white/10">
-                <Mountain className="w-5 h-5 text-teal-400 mb-2" />
+                <Mountain className="w-5 h-5 text-amber-400 mb-2" />
                 <h4 className="font-bold text-sm text-white">Oxygen & High-Altitude First Aid</h4>
                 <p className="text-xs text-slate-300 mt-1">
                   Dedicated portable medical oxygen cylinders and full trauma first aid kits accompany every single batch.
@@ -331,7 +328,7 @@ export default function TracksPage() {
   );
 }
 
-// Reuse TrackDetailModal from TracksSection
+// Modal component using Theme Colors
 function TrackDetailModal({ track, onClose, onBook }) {
   const [activeTab, setActiveTab] = useState("overview");
 
@@ -361,7 +358,7 @@ function TrackDetailModal({ track, onClose, onBook }) {
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-black/20" />
 
           <div className="absolute top-4 left-4 flex items-center gap-2">
-            <span className="px-3 py-1 rounded-full bg-emerald-600 text-white text-xs font-bold uppercase tracking-wider shadow-sm">
+            <span className="px-3 py-1 rounded-full bg-orange-600 text-white text-xs font-bold uppercase tracking-wider shadow-sm">
               {track.category}
             </span>
             <span className="px-3 py-1 rounded-full bg-black/60 backdrop-blur-md text-white text-xs font-bold border border-white/20">
@@ -381,7 +378,7 @@ function TrackDetailModal({ track, onClose, onBook }) {
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 p-3 sm:p-4 bg-slate-50 border-b border-slate-200 text-xs shrink-0">
           <div className="flex items-center gap-2">
-            <Mountain className="w-4 h-4 text-emerald-600 shrink-0" />
+            <Mountain className="w-4 h-4 text-orange-600 shrink-0" />
             <div>
               <span className="text-[10px] text-slate-400 block font-semibold uppercase">
                 Peak Altitude
@@ -401,7 +398,7 @@ function TrackDetailModal({ track, onClose, onBook }) {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <Compass className="w-4 h-4 text-sky-600 shrink-0" />
+            <Compass className="w-4 h-4 text-orange-500 shrink-0" />
             <div>
               <span className="text-[10px] text-slate-400 block font-semibold uppercase">
                 Difficulty
@@ -410,7 +407,7 @@ function TrackDetailModal({ track, onClose, onBook }) {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <MapPin className="w-4 h-4 text-rose-600 shrink-0" />
+            <MapPin className="w-4 h-4 text-amber-600 shrink-0" />
             <div>
               <span className="text-[10px] text-slate-400 block font-semibold uppercase">
                 Start Point
@@ -434,7 +431,7 @@ function TrackDetailModal({ track, onClose, onBook }) {
               onClick={() => setActiveTab(tab.id)}
               className={`py-3 border-b-2 transition-colors whitespace-nowrap cursor-pointer ${
                 activeTab === tab.id
-                  ? "border-emerald-600 text-emerald-700 font-bold"
+                  ? "border-orange-600 text-orange-700 font-bold"
                   : "border-transparent text-slate-500 hover:text-slate-800"
               }`}
             >
@@ -453,12 +450,12 @@ function TrackDetailModal({ track, onClose, onBook }) {
                 <p className="leading-relaxed text-slate-600">{track.overview}</p>
               </div>
 
-              <div className="bg-emerald-50/70 border border-emerald-200 rounded-2xl p-4">
-                <h5 className="font-bold text-emerald-900 text-xs uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                  <Calendar className="w-4 h-4 text-emerald-700" />
+              <div className="bg-orange-50/70 border border-orange-200 rounded-2xl p-4">
+                <h5 className="font-bold text-orange-900 text-xs uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                  <Calendar className="w-4 h-4 text-orange-700" />
                   <span>Best Season to Trek</span>
                 </h5>
-                <p className="text-emerald-800 text-sm font-medium">
+                <p className="text-orange-800 text-sm font-medium">
                   {track.bestSeason}
                 </p>
               </div>
@@ -473,7 +470,7 @@ function TrackDetailModal({ track, onClose, onBook }) {
                       key={idx}
                       className="flex items-center gap-2 p-2.5 rounded-xl bg-slate-50 border border-slate-200/80 text-xs font-medium text-slate-800"
                     >
-                      <Sparkles className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                      <Sparkles className="w-3.5 h-3.5 text-orange-600 shrink-0" />
                       <span>{tag}</span>
                     </div>
                   ))}
@@ -484,11 +481,11 @@ function TrackDetailModal({ track, onClose, onBook }) {
 
           {activeTab === "itinerary" && (
             <div className="space-y-4">
-              <div className="border-l-2 border-emerald-500/40 ml-2 space-y-6">
+              <div className="border-l-2 border-orange-500/40 ml-2 space-y-6">
                 {track.itinerary?.map((item) => (
                   <div key={item.day} className="relative pl-6">
-                    <div className="absolute -left-[9px] top-0.5 w-4 h-4 rounded-full bg-emerald-600 border-2 border-white shadow-xs" />
-                    <span className="text-[11px] font-extrabold uppercase tracking-wider text-emerald-700 block">
+                    <div className="absolute -left-[9px] top-0.5 w-4 h-4 rounded-full bg-orange-600 border-2 border-white shadow-xs" />
+                    <span className="text-[11px] font-extrabold uppercase tracking-wider text-orange-700 block">
                       Day {item.day}
                     </span>
                     <h5 className="text-sm font-bold text-slate-900 mt-0.5">
@@ -514,7 +511,7 @@ function TrackDetailModal({ track, onClose, onBook }) {
                     key={idx}
                     className="flex items-start gap-2.5 p-3 rounded-xl bg-slate-50 border border-slate-200"
                   >
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                    <CheckCircle2 className="w-4 h-4 text-orange-600 shrink-0 mt-0.5" />
                     <span className="text-xs sm:text-sm text-slate-700 font-medium">
                       {inc}
                     </span>
@@ -535,7 +532,7 @@ function TrackDetailModal({ track, onClose, onBook }) {
                     key={idx}
                     className="flex items-center gap-2 p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-medium text-slate-700"
                   >
-                    <ShieldCheck className="w-3.5 h-3.5 text-teal-600 shrink-0" />
+                    <ShieldCheck className="w-3.5 h-3.5 text-orange-600 shrink-0" />
                     <span>{gear}</span>
                   </div>
                 ))}
@@ -572,7 +569,7 @@ function TrackDetailModal({ track, onClose, onBook }) {
 
             <button
               onClick={onBook}
-              className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-amber-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-sm shadow-md shadow-emerald-600/30 transition-all active:scale-95 cursor-pointer"
+              className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-orange-600 via-orange-500 to-amber-500 hover:from-orange-700 hover:to-amber-600 text-white font-bold text-sm shadow-md shadow-orange-500/25 transition-all active:scale-95 cursor-pointer"
             >
               <span>Book This Track</span>
               <ArrowRight className="w-4 h-4" />

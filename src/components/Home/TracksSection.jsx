@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   Compass,
   Mountain,
@@ -13,13 +13,8 @@ import {
   X,
   ChevronLeft,
   ChevronRight,
-  Flame,
   Sparkles,
   Phone,
-  MessageCircle,
-  Award,
-  Layers,
-  LayoutGrid,
 } from "lucide-react";
 import { UTTARAKHAND_TRACKS } from "../Backend/BackenData";
 
@@ -34,28 +29,27 @@ const TRACK_CATEGORIES = [
 
 const formatINR = (price) => `₹${price.toLocaleString("en-IN")}`;
 
-// Helper for difficulty badge styling
+// Helper for difficulty badge styling using theme colors (Orange/Amber/Rose)
 const getDifficultyBadge = (difficulty) => {
   const d = (difficulty || "").toLowerCase();
   if (d.includes("difficult") || d.includes("challenging") || d.includes("strenuous")) {
     return "bg-rose-50 text-rose-700 border-rose-200";
   }
   if (d.includes("easy")) {
-    return "bg-emerald-50 text-emerald-700 border-emerald-200";
+    return "bg-amber-50 text-amber-700 border-amber-200";
   }
-  return "bg-amber-50 text-amber-700 border-amber-200";
+  return "bg-orange-50 text-orange-700 border-orange-200";
 };
 
 export default function TracksSection() {
   const navigate = useNavigate();
   const [activeCategory, setActiveCategory] = useState("all");
   const [selectedTrack, setSelectedTrack] = useState(null);
-  const [viewLayout, setViewLayout] = useState("carousel"); // 'carousel' | 'grid'
   const sliderRef = useRef(null);
 
   const scrollSlider = (direction) => {
     if (sliderRef.current) {
-      const scrollAmount = direction === "left" ? -360 : 360;
+      const scrollAmount = direction === "left" ? -340 : 340;
       sliderRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
     }
   };
@@ -67,19 +61,19 @@ export default function TracksSection() {
 
   return (
     <section className="relative w-full py-8 sm:py-14" id="tracks">
-      {/* Background Decorative Mountain Silhouette Glow */}
+      {/* Background Decorative Warm Theme Glow */}
       <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/3 right-1/4 w-[650px] h-[350px] bg-gradient-to-r from-emerald-100/30 via-teal-100/20 to-orange-100/30 blur-3xl rounded-full" />
+        <div className="absolute top-1/3 right-1/4 w-[650px] h-[350px] bg-gradient-to-r from-orange-100/40 via-amber-100/30 to-orange-50/20 blur-3xl rounded-full" />
       </div>
 
       <div className="w-full">
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-6">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-6">
           <div>
-            {/* Top Pill */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200/80 shadow-xs mb-3">
-              <Compass className="w-4 h-4 text-emerald-600 animate-spin-slow" />
-              <span className="text-xs sm:text-sm font-bold tracking-wide uppercase text-emerald-800 font-heading">
+            {/* Top Badge */}
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-200/80 shadow-xs mb-3">
+              <Compass className="w-4 h-4 text-orange-600 animate-spin-slow" />
+              <span className="text-xs sm:text-sm font-bold tracking-wide uppercase text-orange-800 font-heading">
                 Himalayan Trails & Mountain Tracks
               </span>
             </div>
@@ -87,70 +81,37 @@ export default function TracksSection() {
             {/* Title */}
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight font-heading">
               Uttarakhand{" "}
-              <span className="bg-gradient-to-r from-emerald-600 via-teal-600 to-amber-600 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-orange-600 via-amber-600 to-orange-500 bg-clip-text text-transparent">
                 Trekking Tracks
               </span>
             </h2>
 
-            <p className="mt-3 text-slate-600 text-sm sm:text-base max-w-2xl font-normal leading-relaxed">
+            <p className="mt-2.5 text-slate-600 text-sm sm:text-base max-w-2xl font-normal leading-relaxed">
               Step into ancient shepherd routes, emerald glacial tarns, and sky-touching 15,000+ ft summits led by NIM & IMF certified mountain leaders.
             </p>
           </div>
 
-          {/* Action Bar (View Toggle & Navigation Arrows) */}
-          <div className="flex items-center gap-3 shrink-0">
-            {/* View Mode Toggle */}
-            <div className="hidden sm:inline-flex items-center p-1 bg-slate-100 rounded-xl border border-slate-200">
-              <button
-                onClick={() => setViewLayout("carousel")}
-                className={`p-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
-                  viewLayout === "carousel"
-                    ? "bg-white text-slate-900 shadow-xs"
-                    : "text-slate-600 hover:text-slate-900"
-                }`}
-                title="Slider View"
-              >
-                <Layers className="w-4 h-4" />
-                <span>Slider</span>
-              </button>
-              <button
-                onClick={() => setViewLayout("grid")}
-                className={`p-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
-                  viewLayout === "grid"
-                    ? "bg-white text-slate-900 shadow-xs"
-                    : "text-slate-600 hover:text-slate-900"
-                }`}
-                title="Grid View"
-              >
-                <LayoutGrid className="w-4 h-4" />
-                <span>Grid</span>
-              </button>
-            </div>
-
-            {/* Slider Controls */}
-            {viewLayout === "carousel" && (
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => scrollSlider("left")}
-                  aria-label="Previous Track"
-                  className="w-10 h-10 rounded-full border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 flex items-center justify-center shadow-xs transition-all active:scale-95 cursor-pointer"
-                >
-                  <ChevronLeft className="w-5 h-5" />
-                </button>
-                <button
-                  onClick={() => scrollSlider("right")}
-                  aria-label="Next Track"
-                  className="w-10 h-10 rounded-full border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 flex items-center justify-center shadow-xs transition-all active:scale-95 cursor-pointer"
-                >
-                  <ChevronRight className="w-5 h-5" />
-                </button>
-              </div>
-            )}
+          {/* Slider Navigation Arrows Only (Slider is fine, option toggle removed) */}
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              onClick={() => scrollSlider("left")}
+              aria-label="Previous Track"
+              className="w-10 h-10 rounded-full border border-slate-200 bg-white hover:bg-orange-50 hover:border-orange-300 hover:text-orange-600 text-slate-700 flex items-center justify-center shadow-xs transition-all active:scale-95 cursor-pointer"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+            <button
+              onClick={() => scrollSlider("right")}
+              aria-label="Next Track"
+              className="w-10 h-10 rounded-full border border-slate-200 bg-white hover:bg-orange-50 hover:border-orange-300 hover:text-orange-600 text-slate-700 flex items-center justify-center shadow-xs transition-all active:scale-95 cursor-pointer"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
           </div>
         </div>
 
         {/* Category Filter Tabs */}
-        <div className="flex items-center gap-2.5 overflow-x-auto scrollbar-none pb-4 mb-4">
+        <div className="flex items-center gap-2 sm:gap-2.5 overflow-x-auto scrollbar-none pb-4 mb-3">
           {TRACK_CATEGORIES.map((cat) => {
             const isActive = activeCategory === cat.id;
             return (
@@ -159,8 +120,8 @@ export default function TracksSection() {
                 onClick={() => setActiveCategory(cat.id)}
                 className={`px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer ${
                   isActive
-                    ? "bg-emerald-600 text-white shadow-sm shadow-emerald-600/30"
-                    : "bg-white border border-slate-200 text-slate-700 hover:border-slate-300 hover:bg-slate-50"
+                    ? "bg-gradient-to-r from-orange-600 to-amber-600 text-white shadow-sm shadow-orange-600/30"
+                    : "bg-white border border-slate-200 text-slate-700 hover:border-orange-200 hover:text-orange-700 hover:bg-orange-50/50"
                 }`}
               >
                 {cat.label}
@@ -169,50 +130,39 @@ export default function TracksSection() {
           })}
         </div>
 
-        {/* Tracks Content Display */}
-        {viewLayout === "carousel" ? (
-          /* Horizontal Slider View */
-          <div className="relative group">
-            <div
-              ref={sliderRef}
-              className="flex items-stretch gap-6 overflow-x-auto scrollbar-none pb-6 pt-2 px-1 scroll-smooth snap-x snap-mandatory"
-              style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-            >
-              {filteredTracks.map((track) => (
-                <div
-                  key={track.id}
-                  className="snap-start shrink-0 w-[300px] sm:w-[340px] md:w-[370px]"
-                >
-                  <TrackCard
-                    track={track}
-                    onOpenModal={() => setSelectedTrack(track)}
-                    onBook={() => navigate(`/booking/${track.id}`)}
-                  />
-                </div>
-              ))}
-            </div>
-
-            {/* Subtle Gradient Fade for Slider */}
-            <div className="hidden lg:block absolute -right-2 top-0 bottom-6 w-16 bg-gradient-to-l from-white/90 to-transparent pointer-events-none" />
-          </div>
-        ) : (
-          /* Multi-column Grid View */
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 pt-2">
+        {/* Tracks Horizontal Slider Container */}
+        <div className="relative group">
+          <div
+            ref={sliderRef}
+            className="flex items-stretch gap-4 sm:gap-6 overflow-x-auto scrollbar-none pb-6 pt-2 px-1 scroll-smooth snap-x snap-mandatory"
+            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+          >
             {filteredTracks.map((track) => (
-              <TrackCard
+              <div
                 key={track.id}
-                track={track}
-                onOpenModal={() => setSelectedTrack(track)}
-                onBook={() => navigate(`/booking/${track.id}`)}
-              />
+                className="snap-start shrink-0 w-[280px] sm:w-[320px] md:w-[350px] lg:w-[370px]"
+              >
+                <TrackCard
+                  track={track}
+                  onOpenModal={() => setSelectedTrack(track)}
+                  onBook={() => navigate(`/booking/${track.id}`)}
+                />
+              </div>
             ))}
           </div>
-        )}
+
+          {/* Floating Next/Prev Arrow for Desktop */}
+          <button
+            onClick={() => scrollSlider("right")}
+            aria-label="Scroll next"
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 w-10 h-10 rounded-full bg-white border border-slate-200 text-slate-700 shadow-lg flex items-center justify-center hover:bg-orange-50 hover:text-orange-600 transition-all opacity-0 group-hover:opacity-100 z-10 hidden sm:flex cursor-pointer"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
+        </div>
       </div>
 
-      {/* ======================================================== */}
-      {/* COMPREHENSIVE TRACK DETAIL MODAL                         */}
-      {/* ======================================================== */}
+      {/* Track Detail Modal */}
       {selectedTrack && (
         <TrackDetailModal
           track={selectedTrack}
@@ -228,7 +178,7 @@ export default function TracksSection() {
   );
 }
 
-// --- Track Card Component ---
+// --- Track Card Component (Only Theme Colors) ---
 function TrackCard({ track, onOpenModal, onBook }) {
   const discountPercent =
     track.originalPrice && track.originalPrice > track.price
@@ -236,12 +186,12 @@ function TrackCard({ track, onOpenModal, onBook }) {
       : null;
 
   return (
-    <div className="group relative bg-white rounded-3xl overflow-hidden border border-slate-200/90 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.06)] hover:shadow-[0_20px_40px_-8px_rgba(16,185,129,0.18)] hover:-translate-y-1.5 transition-all duration-300 flex flex-col h-full">
+    <div className="group relative bg-white rounded-3xl overflow-hidden border border-slate-200/90 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.06)] hover:shadow-[0_20px_45px_-8px_rgba(234,88,12,0.22)] hover:-translate-y-1.5 transition-all duration-300 flex flex-col h-full">
       {/* Top Accent Gradient Bar */}
-      <div className="h-1.5 w-full bg-gradient-to-r from-emerald-500 via-teal-500 to-amber-500" />
+      <div className="h-1.5 w-full bg-gradient-to-r from-orange-500 via-amber-500 to-orange-600" />
 
       {/* Image Container */}
-      <div className="relative h-60 sm:h-64 w-full overflow-hidden bg-slate-100 shrink-0">
+      <div className="relative h-56 sm:h-64 w-full overflow-hidden bg-slate-100 shrink-0">
         <img
           src={track.image}
           alt={track.title}
@@ -267,24 +217,24 @@ function TrackCard({ track, onOpenModal, onBook }) {
         {/* Bottom Over-Image Stats */}
         <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white text-xs font-semibold z-10">
           <div className="inline-flex items-center gap-1.5 bg-black/55 backdrop-blur-md px-2.5 py-1 rounded-xl border border-white/20">
-            <Mountain className="w-3.5 h-3.5 text-emerald-400" />
+            <Mountain className="w-3.5 h-3.5 text-amber-400" />
             <span>{track.altitudeFt}</span>
           </div>
 
           <div className="inline-flex items-center gap-1.5 bg-black/55 backdrop-blur-md px-2.5 py-1 rounded-xl border border-white/20">
-            <Compass className="w-3.5 h-3.5 text-amber-400" />
+            <Compass className="w-3.5 h-3.5 text-orange-400" />
             <span>{track.difficulty}</span>
           </div>
         </div>
       </div>
 
       {/* Card Content */}
-      <div className="p-5 flex-1 flex flex-col justify-between">
+      <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between">
         <div>
           {/* Region & Rating */}
           <div className="flex items-center justify-between text-xs text-slate-500 mb-2">
             <div className="flex items-center gap-1 text-slate-600 font-medium">
-              <MapPin className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+              <MapPin className="w-3.5 h-3.5 text-orange-600 shrink-0" />
               <span className="truncate">{track.region}</span>
             </div>
             <div className="flex items-center gap-1 font-bold text-slate-800">
@@ -295,7 +245,7 @@ function TrackCard({ track, onOpenModal, onBook }) {
           </div>
 
           {/* Title */}
-          <h3 className="text-lg font-bold text-slate-900 group-hover:text-emerald-700 transition-colors line-clamp-1">
+          <h3 className="text-base sm:text-lg font-bold text-slate-900 group-hover:text-orange-600 transition-colors line-clamp-1">
             {track.title}
           </h3>
 
@@ -305,11 +255,11 @@ function TrackCard({ track, onOpenModal, onBook }) {
           </p>
 
           {/* Tag Chips */}
-          <div className="flex flex-wrap gap-1.5 my-3.5">
+          <div className="flex flex-wrap gap-1.5 my-3">
             {track.tags?.slice(0, 2).map((tag, idx) => (
               <span
                 key={idx}
-                className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 text-[11px] font-medium"
+                className="px-2 py-0.5 rounded-md bg-orange-50/70 border border-orange-200/50 text-orange-800 text-[11px] font-medium"
               >
                 {tag}
               </span>
@@ -337,24 +287,24 @@ function TrackCard({ track, onOpenModal, onBook }) {
             </div>
 
             {discountPercent && (
-              <span className="px-2 py-1 rounded-lg bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200">
+              <span className="px-2 py-1 rounded-lg bg-orange-50 text-orange-700 text-xs font-bold border border-orange-200">
                 {discountPercent}% OFF
               </span>
             )}
           </div>
 
-          {/* Dual Action Buttons */}
+          {/* Action Buttons */}
           <div className="grid grid-cols-2 gap-2">
             <button
               onClick={onOpenModal}
-              className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl border border-slate-200 hover:border-emerald-300 hover:bg-emerald-50 text-slate-700 hover:text-emerald-700 font-semibold text-xs transition-colors cursor-pointer"
+              className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl border border-slate-200 hover:border-orange-300 hover:bg-orange-50 text-slate-700 hover:text-orange-700 font-semibold text-xs transition-colors cursor-pointer"
             >
               <Eye className="w-3.5 h-3.5" />
               <span>Trail Details</span>
             </button>
             <button
               onClick={onBook}
-              className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-xs shadow-sm shadow-emerald-600/30 transition-all active:scale-95 cursor-pointer"
+              className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-gradient-to-r from-orange-600 via-orange-500 to-amber-500 hover:from-orange-700 hover:to-amber-600 text-white font-bold text-xs shadow-sm shadow-orange-500/25 transition-all active:scale-95 cursor-pointer"
             >
               <span>Book Track</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -366,9 +316,9 @@ function TrackCard({ track, onOpenModal, onBook }) {
   );
 }
 
-// --- Interactive Track Detail Modal Component ---
+// --- Interactive Track Detail Modal (Theme Colors) ---
 function TrackDetailModal({ track, onClose, onBook }) {
-  const [activeTab, setActiveTab] = useState("overview"); // 'overview' | 'itinerary' | 'inclusions' | 'gear'
+  const [activeTab, setActiveTab] = useState("overview");
 
   return (
     <div
@@ -399,7 +349,7 @@ function TrackDetailModal({ track, onClose, onBook }) {
 
           {/* Top Badges */}
           <div className="absolute top-4 left-4 flex items-center gap-2">
-            <span className="px-3 py-1 rounded-full bg-emerald-600 text-white text-xs font-bold uppercase tracking-wider shadow-sm">
+            <span className="px-3 py-1 rounded-full bg-orange-600 text-white text-xs font-bold uppercase tracking-wider shadow-sm">
               {track.category}
             </span>
             <span className="px-3 py-1 rounded-full bg-black/60 backdrop-blur-md text-white text-xs font-bold border border-white/20">
@@ -421,7 +371,7 @@ function TrackDetailModal({ track, onClose, onBook }) {
         {/* Quick Stats Grid Bar */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 p-3 sm:p-4 bg-slate-50 border-b border-slate-200 text-xs shrink-0">
           <div className="flex items-center gap-2">
-            <Mountain className="w-4 h-4 text-emerald-600 shrink-0" />
+            <Mountain className="w-4 h-4 text-orange-600 shrink-0" />
             <div>
               <span className="text-[10px] text-slate-400 block font-semibold uppercase">
                 Peak Altitude
@@ -441,7 +391,7 @@ function TrackDetailModal({ track, onClose, onBook }) {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <Compass className="w-4 h-4 text-sky-600 shrink-0" />
+            <Compass className="w-4 h-4 text-orange-500 shrink-0" />
             <div>
               <span className="text-[10px] text-slate-400 block font-semibold uppercase">
                 Difficulty
@@ -450,7 +400,7 @@ function TrackDetailModal({ track, onClose, onBook }) {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <MapPin className="w-4 h-4 text-rose-600 shrink-0" />
+            <MapPin className="w-4 h-4 text-amber-600 shrink-0" />
             <div>
               <span className="text-[10px] text-slate-400 block font-semibold uppercase">
                 Start Point
@@ -475,7 +425,7 @@ function TrackDetailModal({ track, onClose, onBook }) {
               onClick={() => setActiveTab(tab.id)}
               className={`py-3 border-b-2 transition-colors whitespace-nowrap cursor-pointer ${
                 activeTab === tab.id
-                  ? "border-emerald-600 text-emerald-700 font-bold"
+                  ? "border-orange-600 text-orange-700 font-bold"
                   : "border-transparent text-slate-500 hover:text-slate-800"
               }`}
             >
@@ -497,12 +447,12 @@ function TrackDetailModal({ track, onClose, onBook }) {
                 </p>
               </div>
 
-              <div className="bg-emerald-50/70 border border-emerald-200 rounded-2xl p-4">
-                <h5 className="font-bold text-emerald-900 text-xs uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                  <Calendar className="w-4 h-4 text-emerald-700" />
+              <div className="bg-orange-50/70 border border-orange-200 rounded-2xl p-4">
+                <h5 className="font-bold text-orange-900 text-xs uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                  <Calendar className="w-4 h-4 text-orange-700" />
                   <span>Best Season to Trek</span>
                 </h5>
-                <p className="text-emerald-800 text-sm font-medium">
+                <p className="text-orange-800 text-sm font-medium">
                   {track.bestSeason}
                 </p>
               </div>
@@ -517,7 +467,7 @@ function TrackDetailModal({ track, onClose, onBook }) {
                       key={idx}
                       className="flex items-center gap-2 p-2.5 rounded-xl bg-slate-50 border border-slate-200/80 text-xs font-medium text-slate-800"
                     >
-                      <Sparkles className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                      <Sparkles className="w-3.5 h-3.5 text-orange-600 shrink-0" />
                       <span>{tag}</span>
                     </div>
                   ))}
@@ -528,12 +478,11 @@ function TrackDetailModal({ track, onClose, onBook }) {
 
           {activeTab === "itinerary" && (
             <div className="space-y-4">
-              <div className="border-l-2 border-emerald-500/40 ml-2 space-y-6">
+              <div className="border-l-2 border-orange-500/40 ml-2 space-y-6">
                 {track.itinerary?.map((item) => (
                   <div key={item.day} className="relative pl-6">
-                    {/* Step Dot */}
-                    <div className="absolute -left-[9px] top-0.5 w-4 h-4 rounded-full bg-emerald-600 border-2 border-white shadow-xs" />
-                    <span className="text-[11px] font-extrabold uppercase tracking-wider text-emerald-700 block">
+                    <div className="absolute -left-[9px] top-0.5 w-4 h-4 rounded-full bg-orange-600 border-2 border-white shadow-xs" />
+                    <span className="text-[11px] font-extrabold uppercase tracking-wider text-orange-700 block">
                       Day {item.day}
                     </span>
                     <h5 className="text-sm font-bold text-slate-900 mt-0.5">
@@ -559,7 +508,7 @@ function TrackDetailModal({ track, onClose, onBook }) {
                     key={idx}
                     className="flex items-start gap-2.5 p-3 rounded-xl bg-slate-50 border border-slate-200"
                   >
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                    <CheckCircle2 className="w-4 h-4 text-orange-600 shrink-0 mt-0.5" />
                     <span className="text-xs sm:text-sm text-slate-700 font-medium">
                       {inc}
                     </span>
@@ -580,7 +529,7 @@ function TrackDetailModal({ track, onClose, onBook }) {
                     key={idx}
                     className="flex items-center gap-2 p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-medium text-slate-700"
                   >
-                    <ShieldCheck className="w-3.5 h-3.5 text-teal-600 shrink-0" />
+                    <ShieldCheck className="w-3.5 h-3.5 text-orange-600 shrink-0" />
                     <span>{gear}</span>
                   </div>
                 ))}
@@ -604,7 +553,7 @@ function TrackDetailModal({ track, onClose, onBook }) {
                   {formatINR(track.originalPrice)}
                 </span>
               )}
-              <span className="text-xs font-bold text-emerald-600">
+              <span className="text-xs font-bold text-orange-600">
                 (Taxes & Permits Included)
               </span>
             </div>
@@ -621,7 +570,7 @@ function TrackDetailModal({ track, onClose, onBook }) {
 
             <button
               onClick={onBook}
-              className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-amber-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-sm shadow-md shadow-emerald-600/30 transition-all active:scale-95 cursor-pointer"
+              className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-orange-600 via-orange-500 to-amber-500 hover:from-orange-700 hover:to-amber-600 text-white font-bold text-sm shadow-md shadow-orange-500/25 transition-all active:scale-95 cursor-pointer"
             >
               <span>Book This Track</span>
               <ArrowRight className="w-4 h-4" />
