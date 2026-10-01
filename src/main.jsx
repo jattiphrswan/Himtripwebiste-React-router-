@@ -8,6 +8,7 @@ import AdventureDetail from "./components/Product/AdventureDetail.jsx";
 import TourSearchResults from "./components/BookingPage/Tour_search_results.jsx";
 import Contact from "./components/Contact/Contact.jsx";
 import BookingPage from "./components/BookingPage/Booking.jsx";
+import TracksPage from "./components/Product/TracksPage.jsx";
 import { HashRouter, Routes, Route } from "react-router-dom";
 import NotFound from "./components/Error.jsx";
 import "./index.css";
@@ -21,6 +22,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route index element={<Home />} />
           <Route path="about" element={<About />} />
           <Route path="tours" element={<TourSearchResults />} />
+          <Route path="tracks" element={<TracksPage />} />
+          <Route path="treks" element={<TracksPage />} />
           <Route path="adventure-styles" element={<Adventure />} />
           <Route path="adventure-styles/:id" element={<AdventureDetail />} />
           <Route path="adventure/:id" element={<AdventureDetail />} />

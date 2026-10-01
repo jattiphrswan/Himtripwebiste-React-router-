@@ -4,6 +4,8 @@ import BrowserCollections from "../Product/BrowserCollections";
 import SearchForm from "../Product/SearchForm";
 import WhyChooseHimTrip from "../About/WhyChooseHimTrip";
 import AdventurePreview from "../Product/AdventurePreview"; 
+import ExploreUttarakhand from "./ExploreUttarakhand";
+import TracksSection from "./TracksSection";
 import kedarnath from "../../assets/places/him.jpg"; 
 
 export default function Home() {
@@ -34,14 +36,29 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Products, Collections, Adventure Preview */}
-      <section className="max-w-[1440px] 2xl:max-w-[1520px] mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
+      {/* Main Sections: Explore Uttarakhand, Tracks, Tours, Collections, Adventure Preview */}
+      <section className="max-w-[1440px] 2xl:max-w-[1520px] mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-16">
+        {/* Section 1: Explore Uttarakhand & Quick Trip Planner */}
         <div className="animate-fadeUp" style={{ animationDelay: "0.2s" }}>
+          <ExploreUttarakhand />
+        </div>
+
+        {/* Section 2: Himalayan Trekking Tracks Section */}
+        <div className="animate-fadeUp" style={{ animationDelay: "0.3s" }}>
+          <TracksSection />
+        </div>
+
+        {/* Section 3: Featured Tour Packages */}
+        <div className="animate-fadeUp" style={{ animationDelay: "0.4s" }}>
           <Products />
         </div>
-        <div className="animate-fadeUp" style={{ animationDelay: "0.4s" }}>
+
+        {/* Section 4: Browse Collections */}
+        <div className="animate-fadeUp" style={{ animationDelay: "0.5s" }}>
           <BrowserCollections />
         </div>
+
+        {/* Section 5: Adventure Styles Preview */}
         <div className="animate-fadeUp" style={{ animationDelay: "0.6s" }}>
           <AdventurePreview /> 
         </div>

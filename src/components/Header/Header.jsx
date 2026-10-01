@@ -29,7 +29,7 @@ export default function Header() {
       : "text-white"
     : "text-gray-800";
 
-  const menuItems = ["Home", "About", "Adventure Styles", "Tours", "Contact"];
+  const menuItems = ["Home", "Tracks", "Adventure Styles", "Tours", "About", "Contact"];
 
   return (
     <header
