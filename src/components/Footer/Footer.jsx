@@ -157,25 +157,25 @@ export default function Footer() {
             {/* Direct Contact Info */}
             <div className="space-y-2.5 pt-2 text-xs text-slate-300">
               <a
-                href="tel:+919315667284"
+                href="tel:+919876543210"
                 className="flex items-center gap-2.5 hover:text-orange-400 transition-colors group"
               >
                 <div className="w-7 h-7 rounded-lg bg-slate-800/90 border border-slate-700/60 flex items-center justify-center text-orange-500 group-hover:bg-orange-500 group-hover:text-white transition-colors">
                   <Phone className="w-3.5 h-3.5" />
                 </div>
-                <span className="font-semibold text-white tracking-wide">
-                  +91 9315667284 <span className="text-slate-400 font-normal">(24/7 Traveler Help)</span>
+                <span className="font-semibold text-white tracking-wide font-mono">
+                  +91 98765 43210 <span className="text-slate-400 font-normal font-sans">(Demo Help Line)</span>
                 </span>
               </a>
 
               <a
-                href="mailto:support@himtrip.com"
+                href="mailto:support@himtrip-demo.com"
                 className="flex items-center gap-2.5 hover:text-orange-400 transition-colors group"
               >
                 <div className="w-7 h-7 rounded-lg bg-slate-800/90 border border-slate-700/60 flex items-center justify-center text-orange-500 group-hover:bg-orange-500 group-hover:text-white transition-colors">
                   <Mail className="w-3.5 h-3.5" />
                 </div>
-                <span>support@himtrip.com</span>
+                <span className="font-mono">support@himtrip-demo.com</span>
               </a>
 
               <div className="flex items-center gap-2.5 text-slate-400">
